@@ -1,0 +1,22 @@
+package org.example.newsfeedproject.domain.commentLike.entity;
+
+import jakarta.persistence.*;
+import org.example.newsfeedproject.domain.comment.entity.Comment;
+import org.example.newsfeedproject.domain.feed.entity.Feed;
+import org.example.newsfeedproject.domain.user.entity.User;
+
+@Entity
+@Table(name = "comment_like")
+public class CommentLike {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = false)
+    private Comment comment;
+}
