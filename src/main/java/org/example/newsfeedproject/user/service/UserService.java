@@ -52,7 +52,7 @@ public class UserService {
 
         User user = userRepository.findByIdOrElseThrow(id);
         user.modifyProfile(email, nickname);
-
+        // 둘 중 하나만 변경 할 수 있게 변경
         // 예외처리 작성 ( 이메일 = null or nickname = null )
 
         userRepository.save(user);
@@ -79,6 +79,7 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         // 비밀번호 받아와서 삭제할지 결정해야함
+        // 받아와서 삭제할거면 비밀번호 인코딩한 값을 반환
 
         userRepository.delete(user);
     }
