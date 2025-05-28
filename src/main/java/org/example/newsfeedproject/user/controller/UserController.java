@@ -82,11 +82,4 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    // 유저 친구 조회
-    // 친구 로직 보고 만들어야함
-//    @GetMapping("/{id}/friends")
-//    public ResponseEntity<UserResponseDto> findByFriends(@PathVariable Long id){
-//
-//    }
 }
