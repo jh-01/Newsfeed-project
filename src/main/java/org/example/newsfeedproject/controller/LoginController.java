@@ -1,5 +1,6 @@
 package org.example.newsfeedproject.controller;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,11 @@ public class LoginController {
         // 유저 정보를 받아옴
         User user = loginService.bringUserInfo(dto.getEmail(), dto.getPassword());
 
-        // 비밀번호가 틀리면 401 반환
-        if(!user.getPassword().equals(dto.getPassword())) {
+        // 비밀번호가 틀리면 401 반환 -> bcrypt 로 검증
+        if(!BCrypt.verifyer().verify(
+                dto.getPassword().toCharArray(),
+                user.getPassword()
+        ).verified) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
