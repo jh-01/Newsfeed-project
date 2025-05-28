@@ -14,8 +14,8 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Table(name = "user")
-//@SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?")
-//@SQLRestriction("is_deleted = false")
+@SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 @NoArgsConstructor
 public class User extends BaseTimeEntity {
     @Id
@@ -23,10 +23,10 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Email
-//    @Pattern(
-//            regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
-//            message = "유효한 이메일 형식이 아닙니다."
-//    )
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+            message = "유효한 이메일 형식이 아닙니다."
+    )
     private String email;
 
     @Column(unique = true)
@@ -37,8 +37,8 @@ public class User extends BaseTimeEntity {
     @NotEmpty
     private String password;
 
-//    @Column
-//    private boolean is_deleted;
+    @Column
+    private boolean is_deleted;
 
     public User(String email, String password, String nickname) {
         this.email = email;
