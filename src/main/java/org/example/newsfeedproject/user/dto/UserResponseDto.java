@@ -2,6 +2,7 @@ package org.example.newsfeedproject.user.dto;
 
 
 import lombok.Getter;
+import org.example.newsfeedproject.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -19,5 +20,13 @@ public class UserResponseDto{
         this.nickname = nickname;
         this.createAt = createAt;
         this.modifiedAt = modifiedAt;
+    }
+
+    public static UserResponseDto toDto(User user){
+        return new UserResponseDto(user.getId(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getCreatedAt(),
+                user.getModifiedAt());
     }
 }

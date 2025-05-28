@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -32,6 +34,16 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getCreatedAt(), user.getModifiedAt());
+    }
+
+
+
+    // 전체 유저 조회
+    public List<UserResponseDto> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserResponseDto::toDto)
+                .toList();
     }
 
     @Transactional

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -34,7 +36,13 @@ public class UserController {
     }
 
     // 전체 유저 조회
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> findAll(){
 
+        List<UserResponseDto> findAllUser = userService.findAll();
+
+        return new ResponseEntity<>(findAllUser,HttpStatus.OK);
+    }
 
     // 프로필 수정
     @PutMapping("/{id}")

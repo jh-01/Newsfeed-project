@@ -23,6 +23,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Email
+    @Column(unique = true)
     @Pattern(
             regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
             message = "유효한 이메일 형식이 아닙니다."
