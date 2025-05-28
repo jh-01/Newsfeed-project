@@ -10,10 +10,7 @@ import org.example.newsfeedproject.dto.SessionUserDto;
 import org.example.newsfeedproject.loginservice.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +19,9 @@ public class LoginController {
 
     private final LoginService loginService;
 
+
+
+    // 로그인 기능
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(
             @RequestBody LoginReqeustDto dto,
@@ -64,5 +64,24 @@ public class LoginController {
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
 
     }
+
+
+
+    // 로그아웃 기능
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+
+        // 요청에 세션이 없으면 null 반환, 있으면 있는걸 반환
+        HttpSession session = request.getSession(false);
+
+        // 세션 존재시 삭제함
+        if(session != null) {
+            session.invalidate();
+        }
+
+        return new ResponseEntity<>("로그아웃 성공!",HttpStatus.OK);
+
+    }
+
 
 }
