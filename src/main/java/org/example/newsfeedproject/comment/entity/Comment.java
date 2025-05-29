@@ -16,6 +16,7 @@ import org.example.newsfeedproject.user.entity.User;
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @Getter
