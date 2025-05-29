@@ -3,6 +3,7 @@ package org.example.newsfeedproject.user.service;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.example.newsfeedproject.user.dto.UserResponseDto;
 import org.example.newsfeedproject.user.entity.User;
 import org.example.newsfeedproject.user.repository.UserRepository;
@@ -97,5 +98,21 @@ public class UserService {
 
         // 활성화한 삭제여부 반영
         userRepository.save(user);
+    }
+
+    // 로그인한 유저가 자기정보를 바꾸려고 하는지 검증
+    public void isSameUser(Long id, SessionUserDto sessionUserDto) {
+
+        // 바꾸려고 하는 유저 정보
+        User user = userRepository.findByIdOrElseThrow(id);
+
+        // 세션에 저장된 사용자의 이메일
+        String userEmail = sessionUserDto.getEmail();
+
+        // 비교된 이메일이 다르면 401 반환
+        if(userEmail.equals(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
     }
 }

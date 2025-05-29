@@ -1,5 +1,8 @@
 package org.example.newsfeedproject.user.dto;
 
+import lombok.Getter;
+
+@Getter
 public class SessionUserDto {
 
     private final String nickname;

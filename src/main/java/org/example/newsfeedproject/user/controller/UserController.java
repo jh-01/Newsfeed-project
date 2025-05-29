@@ -4,12 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.constant.Const;
-import org.example.newsfeedproject.user.dto.UpdatePasswordDto;
-import org.example.newsfeedproject.user.dto.UpdateProfileDto;
-import org.example.newsfeedproject.user.dto.UserRequestDto;
-import org.example.newsfeedproject.user.dto.UserResponseDto;
+import org.example.newsfeedproject.user.dto.*;
 import org.example.newsfeedproject.user.service.UserService;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +61,12 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        // 검증을 위한 다운 캐스팅
+        SessionUserDto sessionUserDto = (SessionUserDto) session.getAttribute(Const.USER);
+
+        // 유저가 자기정보를 바꾸려고 하는지 검증
+        userService.isSameUser(id, sessionUserDto);
+
         UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto.getEmail(), updateProfileDto.getNickname());
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
@@ -84,6 +86,12 @@ public class UserController {
         if(session == null || session.getAttribute(Const.USER) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        // 검증을 위한 다운 캐스팅
+        SessionUserDto sessionUserDto = (SessionUserDto) session.getAttribute(Const.USER);
+
+        // 유저가 자기정보를 바꾸려고 하는지 검증
+        userService.isSameUser(id, sessionUserDto);
 
         // 비밀번호 변경 로직
         userService.updatePassword(id, updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
@@ -106,6 +114,12 @@ public class UserController {
         if(session == null || session.getAttribute(Const.USER) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        // 검증을 위한 다운 캐스팅
+        SessionUserDto sessionUserDto = (SessionUserDto) session.getAttribute(Const.USER);
+
+        // 유저가 자기정보를 바꾸려고 하는지 검증
+        userService.isSameUser(id, sessionUserDto);
 
         userService.deleteUser(id, password);
 
