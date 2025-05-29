@@ -28,6 +28,8 @@ public class UserService {
         // 인코딩된 정보로 유저생성
         User user = new User(email, encodedPassword, nickName);
 
+        System.out.println("암호화 여부 : " + user.getPassword());
+
         User saveUser = userRepository.save(user);
 
         // 닉네임 같은 경우 오류 로직 구상해야함

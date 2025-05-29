@@ -21,6 +21,7 @@ public class UserController {
     // 유저 생성 ( 회원가입 )
     @PostMapping
     public ResponseEntity<UserResponseDto> signup(@RequestBody UserRequestDto userRequestDto) {
+
         UserResponseDto singupUserResponseDto = userService.signup(userRequestDto.getEmail(), userRequestDto.getPassword(), userRequestDto.getNickname());
 
         return new ResponseEntity<>(singupUserResponseDto, HttpStatus.CREATED);
