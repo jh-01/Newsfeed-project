@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.example.newsfeedproject.common.entity.BaseTimeEntity;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.feed.entity.Feed;
-import org.example.newsfeedproject.domain.user.entity.User;
+import org.example.newsfeedproject.user.entity.User;
 
 @Entity
 @Table(name = "comment")
