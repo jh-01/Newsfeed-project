@@ -2,6 +2,8 @@ package org.example.newsfeedproject.friend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.example.newsfeedproject.user.dto.UserResponseDto;
+import org.example.newsfeedproject.user.entity.User;
 
 @Getter
 @AllArgsConstructor
@@ -11,8 +13,8 @@ public class FriendResponseDto {
 
     private final String email;
 
-    // memberResponseDto로 옮겨야함
-    public static MemberResponseDto toDto(Member member) {
-        return new MemberResponseDto(member.getId(), member.getNickname(), member.getEmail());
-    }
+    // UserResponseDto로 옮겨야함
+//    public static UserResponseDto toDto(User user) {
+//        return new UserResponseDto(user.getId(), user.getNickname(), user.getEmail());
+//    }
 }

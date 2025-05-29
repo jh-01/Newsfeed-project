@@ -29,7 +29,8 @@ public class FriendService {
 
     public FriendResponseDto add(HttpServletRequest request, Long id){
 
-        User me = userRepository.findByIdOrElseThrow(request.getSession().getAttribute().getId());
+        User loginUser = (User) request.getSession().getAttribute("user");
+        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
 
         User friend = userRepository.findByIdOrElseThrow(id);
 
@@ -42,7 +43,8 @@ public class FriendService {
 
     public void delete(HttpServletRequest request, Long id){
 
-        User me = userRepository.findByIdOrElseThrow(request.getSession().getAttribute());
+        User loginUser = (User) request.getSession().getAttribute("user");
+        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
 
         User friend = userRepository.findByIdOrElseThrow(id);
 
@@ -53,9 +55,10 @@ public class FriendService {
 
     public List<FindFriendResponseDto> find(HttpServletRequest request){
 
-        User me = userRepository.findByIdOrElseThrow(request.getSession().getAttribute());
+        User loginUser = (User) request.getSession().getAttribute("user");
+        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
 
-        friendRepository.findAllByUserId(me);
+        return friendRepository.findAllByUserId(me.getId()).stream().map(FindFriendResponseDto::toDto).toList();
 
     }
 }
