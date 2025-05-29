@@ -28,4 +28,6 @@ public class CommentLike {
     private Comment commentId;
 
 
+    public CommentLike(User user, Comment comment) {
+    }
 }

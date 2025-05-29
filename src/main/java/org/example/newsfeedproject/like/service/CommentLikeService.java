@@ -2,6 +2,8 @@ package org.example.newsfeedproject.like.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeedproject.comment.entity.Comment;
+import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.like.entity.CommentLike;
 import org.example.newsfeedproject.like.repository.CommentLikeRepository;
 import org.example.newsfeedproject.user.entity.User;
@@ -22,13 +24,13 @@ public class CommentLikeService {
 
         Comment comment = commentRepository.findByIdOrElseThrow(id);
 
-        CommentLike commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
+        CommentLike commentLike = commentLikeRepository.findByUserIdAndCommentId(user, comment);
 
         if (commentLike != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복 좋아요는 불가합니다.");
         }
 
-        likeRepository.save(commentLike);
+        commentLikeRepository.save(commentLike);
 
     }
 
@@ -40,7 +42,7 @@ public class CommentLikeService {
 
         CommentLike commentLike = new CommentLike(user, comment);
 
-        likeRepository.delete(commentLike);
+        commentLikeRepository.delete(commentLike);
 
     }
 }
