@@ -93,12 +93,21 @@ public class UserController {
 
     // 유저 삭제 ( 회원 탈퇴 )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable Long id,
+            @RequestHeader("password") String password,
+            HttpServletRequest request
+    ){
 
-        // 세션 or Token 확인 작업 필요
+        // 세션 가져오기
+        HttpSession session = request.getSession();
 
+        // 세션 없을시 404 반환
+        if(session == null || session.getAttribute(Const.USER) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
-        userService.deleteUser(id);
+        userService.deleteUser(id, password);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

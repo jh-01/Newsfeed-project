@@ -86,11 +86,16 @@ public class UserService {
 
     // 유저 삭제
     @Transactional
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id, String password) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        // 비밀번호 받아와서 삭제할지 결정해야함
+        // 헤더에서 받아온 비밀번호 검증
+        BCrypt.verifyer().verify(password.toCharArray(),user.getPassword());
 
-        userRepository.delete(user);
+        // 삭제여부 true 로 변경
+        user.setIs_deleted(true);
+
+        // 활성화한 삭제여부 반영
+        userRepository.save(user);
     }
 }

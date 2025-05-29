@@ -64,5 +64,10 @@ public class User extends BaseTimeEntity {
     public void updatePassword(String password) {
         this.password = password;
     }
+
+    // 삭제여부 변경
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 }
 
