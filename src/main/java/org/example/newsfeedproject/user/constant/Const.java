@@ -1,4 +1,4 @@
-package org.example.newsfeedproject.constant;
+package org.example.newsfeedproject.user.constant;
 
 public interface Const {
 

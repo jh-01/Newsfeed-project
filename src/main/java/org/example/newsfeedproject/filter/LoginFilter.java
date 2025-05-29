@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.example.newsfeedproject.constant.Const;
+import org.example.newsfeedproject.user.constant.Const;
 import org.springframework.util.PatternMatchUtils;
 
 import java.io.IOException;

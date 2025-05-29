@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.newsfeedproject.common.BaseTimeEntity;
+import org.example.newsfeedproject.common.entity.BaseTimeEntity;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -54,6 +54,10 @@ public class User extends BaseTimeEntity {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+    }
+
+    public User(Long userId) {
+        super();
     }
 
     public void modifyProfile(String email, String nickname) {

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.newsfeedproject.feed.entity.Feed;
 import org.example.newsfeedproject.user.entity.User;
 
 @Getter
