@@ -56,11 +56,6 @@ public class UserController {
         // 세션 가져오기
         HttpSession session = request.getSession();
 
-        // 세션 없을시 404 반환
-        if(session == null || session.getAttribute(Const.USER) == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         // 검증을 위한 다운 캐스팅
         SessionUserDto sessionUserDto = (SessionUserDto) session.getAttribute(Const.USER);
 
@@ -81,11 +76,6 @@ public class UserController {
 
         // 세션 가져오기
         HttpSession session = request.getSession();
-
-        // 세션 없을시 404 반환
-        if(session == null || session.getAttribute(Const.USER) == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         // 검증을 위한 다운 캐스팅
         SessionUserDto sessionUserDto = (SessionUserDto) session.getAttribute(Const.USER);
@@ -109,11 +99,6 @@ public class UserController {
 
         // 세션 가져오기
         HttpSession session = request.getSession();
-
-        // 세션 없을시 404 반환
-        if(session == null || session.getAttribute(Const.USER) == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         // 검증을 위한 다운 캐스팅
         SessionUserDto sessionUserDto = (SessionUserDto) session.getAttribute(Const.USER);
