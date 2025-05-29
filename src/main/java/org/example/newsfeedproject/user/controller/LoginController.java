@@ -8,6 +8,7 @@ import org.example.newsfeedproject.constant.Const;
 import org.example.newsfeedproject.user.dto.LoginReqeustDto;
 import org.example.newsfeedproject.user.dto.LoginResponseDto;
 import org.example.newsfeedproject.user.dto.SessionUserDto;
+import org.example.newsfeedproject.user.entity.User;
 import org.example.newsfeedproject.user.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +30,12 @@ public class LoginController {
             HttpServletRequest request
             ) {
 
-        // 유저 정보를 받아옴
-        User user = loginService.bringUserInfo(dto.getEmail(), dto.getPassword());
+        // 유저 정보를 모두 받아옴
+        User user = loginService.bringUserInfo(
+                dto.getEmail(),
+                dto.getPassword());
 
-        // 비밀번호가 틀리면 401 반환 -> bcrypt 로 검증
+        // 비밀번호가 틀리면 401 반환 -> BCrypt 로 검증
         if(!BCrypt.verifyer().verify(
                 dto.getPassword().toCharArray(),
                 user.getPassword()
@@ -41,7 +44,7 @@ public class LoginController {
         }
 
         // 삭제된 유저이면 400 반환
-        if(user.getIsDeleted) {
+        if(user.is_deleted()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
