@@ -91,7 +91,12 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         // 헤더에서 받아온 비밀번호 검증
-        BCrypt.verifyer().verify(password.toCharArray(),user.getPassword());
+        BCrypt.Result result =  BCrypt.verifyer().verify(password.toCharArray(),user.getPassword());
+
+        // 비밀번호가 다르면 400 반환
+        if(!result.verified) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
         // 삭제여부 true 로 변경
         user.setIs_deleted(true);
