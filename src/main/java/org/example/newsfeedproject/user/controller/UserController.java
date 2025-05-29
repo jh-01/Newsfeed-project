@@ -50,9 +50,9 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody UpdateProfileDto updateProfileDto) {
 
-        // 세션 or Token 확인 작업 필요
+        // 세션 확인 작업 필요
 
-        UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto.getEmail(), updateProfileDto.getNickname());
+        UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
@@ -64,7 +64,7 @@ public class UserController {
             @RequestBody UpdatePasswordDto updatePasswordDto
     ) {
 
-        // 세션 or Token 확인 작업 필요
+        // 세션 확인 작업 필요
 
         userService.updatePassword(id, updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
 
@@ -75,8 +75,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
 
-        // 세션 or Token 확인 작업 필요
-
+        // 세션 작업 필요
 
         userService.deleteUser(id);
 

@@ -7,12 +7,14 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.newsfeedproject.common.BaseTimeEntity;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "user")
 @SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
@@ -47,13 +49,14 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
-    public void modifyProfile(String email, String nickname) {
-        this.email = email;
-        this.nickname = nickname;
-    }
+//    public void modifyProfile(String email, String nickname) {
+//        this.email = email;
+//        this.nickname = nickname;
+//    }
 
     public void updatePassword(String password) {
         this.password = password;
     }
+
 }
 
