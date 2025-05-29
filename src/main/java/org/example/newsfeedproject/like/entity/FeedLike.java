@@ -1,32 +1,30 @@
-package org.example.newsfeedproject.friend.entity;
+package org.example.newsfeedproject.like.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.newsfeedproject.comment.entity.Comment;
+import org.example.newsfeedproject.feed.entity.Feed;
 import org.example.newsfeedproject.user.entity.User;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comment_likes")
-public class CommentLike {
+@Table(name = "feed_likes")
+public class FeedLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
     @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment commentId;
-
+    @JoinColumn(name = "feed_id")
+    private Feed feedId;
 
 }
