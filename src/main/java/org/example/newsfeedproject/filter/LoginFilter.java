@@ -12,7 +12,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
 
     // 로그인 안해도 접근가능한 url
-    private static final String[] WHITE_LIST = {"/", "/users*", "/users/login"};
+    private static final String[] WHITE_LIST = {"/", "/users", "/users/login"};
 
     boolean isWhiteList(String requestURI) {
         return PatternMatchUtils.simpleMatch(WHITE_LIST,requestURI);
@@ -29,10 +29,6 @@ public class LoginFilter implements Filter {
         // 요청 url 받아오기
         String requestURI = httpRequest.getRequestURI();
 
-        System.err.println("======== [LoginFilter] 실행됨 ========");
-        System.err.println("URI: " + httpRequest.getRequestURI());
-        System.err.println("isWhiteList: " + isWhiteList(requestURI));
-
         // 로그인한 유저만 모든 url 에 접근가능
         if(!isWhiteList(requestURI)) {
             HttpSession session = httpRequest.getSession(false);
@@ -40,7 +36,7 @@ public class LoginFilter implements Filter {
             // 로그인 안한 유저는 WHITE_LIST 에 있는 url 만 접근가능
             // 접근 시도시 401, 에러메세지 반환
             if (session == null || session.getAttribute(Const.USER) == null) {
-                httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 httpResponse.setContentType("application/json");
                 httpResponse.getWriter().write("{\"message\" : \"로그인이 필요합니다.\"}");
 
@@ -53,10 +49,6 @@ public class LoginFilter implements Filter {
         // 다음 필터로 넘겨주기
         filterChain.doFilter(httpRequest, httpResponse);
 
-    }
-
-    public LoginFilter() {
-        System.err.println("🚨 LoginFilter 생성자 호출됨");
     }
 
 }
