@@ -1,6 +1,9 @@
 package org.example.newsfeedproject.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeedproject.user.dto.UpdatePasswordDto;
 import org.example.newsfeedproject.user.dto.UpdateProfileDto;
 import org.example.newsfeedproject.user.dto.UserRequestDto;
@@ -9,6 +12,7 @@ import org.example.newsfeedproject.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,7 +32,12 @@ public class UserController {
 
     // 특정 사용자 조회
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findById(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ) {
+        // 생성된 Session 가져오기
+        HttpSession session = request.getSession();
 
         UserResponseDto userResponseDto = userService.findById(id);
 
@@ -36,8 +45,11 @@ public class UserController {
     }
 
     // 전체 유저 조회
-    @GetMapping
-    public ResponseEntity<List<UserResponseDto>> findAll(){
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponseDto>> findAll(HttpServletRequest request){
+
+        // 생성된 Session 가져오기
+        HttpSession session = request.getSession();
 
         List<UserResponseDto> findAllUser = userService.findAll();
 
@@ -48,9 +60,11 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> modifyProfile(
             @PathVariable Long id,
-            @RequestBody UpdateProfileDto updateProfileDto) {
+            @RequestBody UpdateProfileDto updateProfileDto,
+            HttpServletRequest request) {
 
-        // 세션 확인 작업 필요
+        // 생성된 Session 가져오기
+        HttpSession session = request.getSession();
 
         UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto);
 
@@ -61,10 +75,12 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(
             @PathVariable Long id,
-            @RequestBody UpdatePasswordDto updatePasswordDto
+            @RequestBody UpdatePasswordDto updatePasswordDto,
+            HttpServletRequest request
     ) {
 
-        // 세션 확인 작업 필요
+        // 생성된 Session 가져오기
+        HttpSession session = request.getSession();
 
         userService.updatePassword(id, updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
 
@@ -73,9 +89,13 @@ public class UserController {
 
     // 유저 삭제 ( 회원 탈퇴 )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable Long id,
+            HttpServletRequest request
+            ){
 
-        // 세션 작업 필요
+        // 생성된 Session 가져오기
+        HttpSession session = request.getSession();
 
         userService.deleteUser(id);
 

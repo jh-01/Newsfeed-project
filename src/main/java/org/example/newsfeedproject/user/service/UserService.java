@@ -1,5 +1,6 @@
 package org.example.newsfeedproject.user.service;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeedproject.user.dto.UpdateProfileDto;
@@ -14,14 +15,19 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
+    // 유저 생성 - 회원가입
     public UserResponseDto signup(String email, String password, String nickName) {
 
-        User user = new User(email, password, nickName);
+        // BCrypt 로 인코딩
+        String encodedPassword = BCrypt.withDefaults().hashToString(10, password.toCharArray());
+
+        // 인코딩된 정보로 유저생성
+        User user = new User(email, encodedPassword, nickName);
+
         User saveUser = userRepository.save(user);
 
         // 닉네임 같은 경우 오류 로직 구상해야함
@@ -31,7 +37,6 @@ public class UserService {
                 saveUser.getNickname(),
                 saveUser.getCreatedAt(),
                 saveUser.getModifiedAt());
-
     }
 
     // 유저 조회
