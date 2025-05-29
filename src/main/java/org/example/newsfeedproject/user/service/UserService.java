@@ -69,14 +69,18 @@ public class UserService {
 
     // 비밀번호 수정
     @Transactional
-    public void updatePassword(Long id, String oldPassword,String newPassword) {
+    public void updatePassword(Long id, String oldPassword, String newPassword) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        // 비밀번호 암호화 필요
-        if(!user.getPassword().equals(oldPassword)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"비밀번호가 일치하지 않습니다");
+        // 비밀번호 검증
+        BCrypt.Result result =  BCrypt.verifyer().verify(oldPassword.toCharArray(),user.getPassword());
+
+        // 비밀번호가 다르면 400 반환
+        if(!result.verified) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        // 비밀번호 변경
         user.updatePassword(newPassword);
     }
 

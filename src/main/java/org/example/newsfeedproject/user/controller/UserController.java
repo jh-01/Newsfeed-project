@@ -1,11 +1,15 @@
 package org.example.newsfeedproject.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeedproject.constant.Const;
 import org.example.newsfeedproject.user.dto.UpdatePasswordDto;
 import org.example.newsfeedproject.user.dto.UpdateProfileDto;
 import org.example.newsfeedproject.user.dto.UserRequestDto;
 import org.example.newsfeedproject.user.dto.UserResponseDto;
 import org.example.newsfeedproject.user.service.UserService;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,11 +66,18 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(
             @PathVariable Long id,
-            @RequestBody UpdatePasswordDto updatePasswordDto
-    ) {
+            @RequestBody UpdatePasswordDto updatePasswordDto,
+            HttpServletRequest request) {
 
-        // 세션 or Token 확인 작업 필요
+        // 세션 가져오기
+        HttpSession session = request.getSession();
 
+        // 세션 없을시 404 반환
+        if(session == null || session.getAttribute(Const.USER) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // 비밀번호 변경 로직
         userService.updatePassword(id, updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
 
         return new ResponseEntity<>(HttpStatus.OK);
