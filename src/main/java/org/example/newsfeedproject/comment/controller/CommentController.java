@@ -7,10 +7,9 @@ import org.example.newsfeedproject.comment.dto.CommentCreateRequest;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.service.CommentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/comments")
@@ -35,5 +34,31 @@ public class CommentController {
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
         CommentResponse response = commentService.saveComment(createRequest.getFeedId(), 1L, createRequest.getComments());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/feeds/{id}")
+    public ResponseEntity<List<CommentResponse>> getAllComments(
+            HttpServletRequest request,
+            @PathVariable Long id
+    ){
+        HttpSession session = request.getSession(false);
+        if(session == null) {
+            throw new RuntimeException("로그인을 해주세요.");
+        }
+        // session에 저장된 유저정보 조회
+        // UserResponseDto loginUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
+
+        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
+        List<CommentResponse> commentResponseList = commentService.getAllComments(id, 1L);
+        return ResponseEntity.ok(commentResponseList);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<CommentResponse> getComment(
+            @PathVariable Long id
+    ){
+        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
+        CommentResponse commentResponse = commentService.getComment(id);
+        return ResponseEntity.ok(commentResponse);
     }
 }

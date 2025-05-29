@@ -6,8 +6,12 @@ import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.entity.Comment;
 import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.feed.entity.Feed;
-import org.example.newsfeedproject.domain.user.entity.User;
+import org.example.newsfeedproject.user.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -40,5 +44,18 @@ public class CommentService {
                 .build();
         Comment saved = commentRepository.save(comment);
         return Comment.toDto(saved);
+    }
+
+    @Transactional
+    public List<CommentResponse> getAllComments(Long feedId, Long userId){
+        final List<CommentResponse> commentList = commentRepository.findAllByFeedId(feedId, userId);
+        return commentList;
+    }
+
+    @Transactional
+    public CommentResponse getComment(Long id){
+        final Optional<Comment> optionalComment = commentRepository.findById(id);
+        if(optionalComment.isEmpty()) throw new RuntimeException("존재하지 않은 댓글입니다.");
+        return Comment.toDto(optionalComment.get());
     }
 }

@@ -47,6 +47,10 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
+    public User(Long userId) {
+        super();
+    }
+
     public void modifyProfile(String email, String nickname) {
         this.email = email;
         this.nickname = nickname;

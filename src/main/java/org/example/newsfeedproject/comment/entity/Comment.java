@@ -34,7 +34,7 @@ public class Comment extends BaseTimeEntity {
         this.comments = comments;
     }
 
-    public CommentResponse toDto(Comment comment){
+    public static CommentResponse toDto(Comment comment){
         return new CommentResponse(
                 comment.id,
                 comment.feed.getId(),

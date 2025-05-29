@@ -42,9 +42,9 @@ public class LoginController {
         }
 
         // 삭제된 유저이면 400 반환
-        if(user.getIsDeleted()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+//        if(user.getIsDeleted()) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
         // 세션생성
         HttpSession session = request.getSession();
