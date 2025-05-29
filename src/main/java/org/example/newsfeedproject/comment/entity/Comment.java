@@ -2,7 +2,9 @@ package org.example.newsfeedproject.comment.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.newsfeedproject.common.entity.BaseTimeEntity;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.feed.entity.Feed;
@@ -16,6 +18,7 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -25,6 +28,7 @@ public class Comment extends BaseTimeEntity {
     private Feed feed;
 
     @Column(nullable = false)
+    @Setter
     private String comments;
 
     @Builder

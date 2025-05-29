@@ -58,4 +58,18 @@ public class CommentService {
         if(optionalComment.isEmpty()) throw new RuntimeException("존재하지 않은 댓글입니다.");
         return Comment.toDto(optionalComment.get());
     }
+
+    @Transactional
+    public CommentResponse modifyComment(Long id, Long userId, String comments){
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow();
+
+        if(comment.getUser().getId() != userId)
+            throw new RuntimeException("자신의 댓글만 수정할 수 있습니다.");
+        comment.setComments(comments);
+
+        commentRepository.save(comment);
+
+        return Comment.toDto(comment);
+    }
 }
