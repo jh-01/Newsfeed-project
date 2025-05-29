@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FriendRequestDto {
+public class AddFriendRequestDto {
 
     private final Long Id;
 

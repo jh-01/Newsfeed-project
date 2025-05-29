@@ -3,9 +3,8 @@ package org.example.newsfeedproject.friend.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.friend.dto.FindFriendResponseDto;
-import org.example.newsfeedproject.friend.dto.FriendRequestDto;
-import org.example.newsfeedproject.friend.dto.FriendResponseDto;
-import org.example.newsfeedproject.friend.dto.SearchUsersResponseDto;
+import org.example.newsfeedproject.friend.dto.AddFriendRequestDto;
+import org.example.newsfeedproject.friend.dto.AddFriendResponseDto;
 import org.example.newsfeedproject.friend.service.FriendService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +29,9 @@ public class FriendController {
 //    }
 
     @PostMapping
-    public ResponseEntity<FriendResponseDto> add(@RequestBody FriendRequestDto dto, HttpServletRequest request){
+    public ResponseEntity<AddFriendResponseDto> add(@RequestBody AddFriendRequestDto dto, HttpServletRequest request){
 
-        FriendResponseDto friendResponseDto = friendService.add(request, dto.getId());
+        AddFriendResponseDto friendResponseDto = friendService.add(request, dto.getId());
 
         return new ResponseEntity<>(friendResponseDto,HttpStatus.CREATED) ;
     }

@@ -3,11 +3,9 @@ package org.example.newsfeedproject.friend.service;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.friend.dto.FindFriendResponseDto;
-import org.example.newsfeedproject.friend.dto.FriendResponseDto;
-import org.example.newsfeedproject.friend.dto.SearchUsersResponseDto;
+import org.example.newsfeedproject.friend.dto.AddFriendResponseDto;
 import org.example.newsfeedproject.friend.entity.Friend;
 import org.example.newsfeedproject.friend.repository.FriendRepository;
-import org.example.newsfeedproject.user.dto.UserResponseDto;
 import org.example.newsfeedproject.user.entity.User;
 import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class FriendService {
 //        return UserRepository.findAllByNickname(nickname).stream().map(UserResponseDto::toDto).toList();
 //    }
 
-    public FriendResponseDto add(HttpServletRequest request, Long id){
+    public AddFriendResponseDto add(HttpServletRequest request, Long id){
 
         User loginUser = (User) request.getSession().getAttribute("user");
         User me = userRepository.findByIdOrElseThrow(loginUser.getId());
@@ -38,7 +36,7 @@ public class FriendService {
 
         friendRepository.save(addFriend);
 
-        return new FriendResponseDto(friend.getNickname(), friend.getEmail());
+        return new AddFriendResponseDto(friend.getNickname(), friend.getEmail());
     }
 
     public void delete(HttpServletRequest request, Long id){

@@ -2,12 +2,10 @@ package org.example.newsfeedproject.friend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.newsfeedproject.user.dto.UserResponseDto;
-import org.example.newsfeedproject.user.entity.User;
 
 @Getter
 @AllArgsConstructor
-public class FriendResponseDto {
+public class AddFriendResponseDto {
 
     private final String nickname;
 
