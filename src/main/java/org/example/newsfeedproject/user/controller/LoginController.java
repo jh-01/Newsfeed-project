@@ -54,7 +54,8 @@ public class LoginController {
         // 세션에 저장할 값에 닉네임과 이메일만 남김.
         SessionUserDto sessionDto = new SessionUserDto(
                 user.getNickname(),
-                user.getEmail()
+                user.getEmail(),
+                user.getId()
         );
 
         // 세션에 값 저장
