@@ -1,7 +1,9 @@
 package org.example.newsfeedproject.user.service;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.example.newsfeedproject.user.dto.UserResponseDto;
 import org.example.newsfeedproject.user.entity.User;
 import org.example.newsfeedproject.user.repository.UserRepository;
@@ -18,9 +20,17 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
+
+
+    // 유저 생성 - 회원가입
     public UserResponseDto signup(String email, String password, String nickName) {
 
-        User user = new User(email, password, nickName);
+        // BCrypt 로 인코딩
+        String encodedPassword = BCrypt.withDefaults().hashToString(10, password.toCharArray());
+
+        // 인코딩된 정보로 유저생성
+        User user = new User(email, encodedPassword, nickName);
+
         User saveUser = userRepository.save(user);
 
         // 닉네임 같은 경우 오류 로직 구상해야함
@@ -28,6 +38,8 @@ public class UserService {
         return new UserResponseDto(saveUser.getId(), saveUser.getEmail(), saveUser.getNickname(), saveUser.getCreatedAt(), saveUser.getModifiedAt());
 
     }
+
+
 
     // 유저 조회
     public UserResponseDto findById(Long id) {
@@ -46,40 +58,75 @@ public class UserService {
                 .toList();
     }
 
+
+
     @Transactional
     // 유저 프로필 수정
     public UserResponseDto modifyProfile(Long id,String email, String nickname) {
 
+        // Optional 에서 이미 예외처리를 했기 때문에 null 이 아님.
         User user = userRepository.findByIdOrElseThrow(id);
-        user.modifyProfile(email, nickname);
 
-        // 예외처리 작성 ( 이메일 = null or nickname = null )
+        user.modifyProfile(email, nickname);
 
         userRepository.save(user);
 
         return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getCreatedAt(),user.getModifiedAt());
     }
 
+
+
     // 비밀번호 수정
     @Transactional
-    public void updatePassword(Long id, String oldPassword,String newPassword) {
+    public void updatePassword(Long id, String oldPassword, String newPassword) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        // 비밀번호 암호화 필요
-        if(!user.getPassword().equals(oldPassword)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"비밀번호가 일치하지 않습니다");
+        // 비밀번호 검증
+        BCrypt.Result result =  BCrypt.verifyer().verify(oldPassword.toCharArray(),user.getPassword());
+
+        // 비밀번호가 다르면 400 반환
+        if(!result.verified) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        // 비밀번호 변경
         user.updatePassword(newPassword);
     }
 
+
+
     // 유저 삭제
     @Transactional
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id, String password) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        // 비밀번호 받아와서 삭제할지 결정해야함
+        // 헤더에서 받아온 비밀번호 검증
+        BCrypt.Result result =  BCrypt.verifyer().verify(password.toCharArray(),user.getPassword());
 
+        // 비밀번호가 다르면 400 반환
+        if(!result.verified) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        // 소프트삭제 실행
         userRepository.delete(user);
+    }
+
+
+
+    // 로그인한 유저가 자기정보를 바꾸려고 하는지 검증
+    public void isSameUser(Long id, SessionUserDto sessionUserDto) {
+
+        // 바꾸려고 하는 유저 정보
+        User user = userRepository.findByIdOrElseThrow(id);
+
+        // 세션에 저장된 사용자의 이메일
+        String userEmail = sessionUserDto.getEmail();
+
+        // 비교된 이메일이 다르면 401 반환
+        if(!userEmail.equals(user.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
     }
 }
