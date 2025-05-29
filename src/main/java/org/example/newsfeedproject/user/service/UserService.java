@@ -108,11 +108,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        // 삭제여부 true 로 변경
-        user.setIs_deleted(true);
-
-        // 활성화한 삭제여부 반영
-        userRepository.save(user);
+        // 소프트삭제 실행
+        userRepository.delete(user);
     }
 
 

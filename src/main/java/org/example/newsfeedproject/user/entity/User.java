@@ -14,7 +14,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Table(name = "user")
-@SQLDelete(sql = "UPDATE category SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
 @NoArgsConstructor
 public class User extends BaseTimeEntity {
@@ -65,9 +65,5 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-    // 삭제여부 변경
-    public void setIs_deleted(boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
 }
 

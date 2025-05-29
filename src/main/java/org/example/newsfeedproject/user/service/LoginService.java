@@ -20,7 +20,7 @@ public class LoginService {
     public User bringUserInfo(String email, String password) {
 
         // 레포지토리에 email 로 유저정보를 조회하는 메서드
-        Optional<User> byEmail = userRepository.findByEmail(email);
+        Optional<User> byEmail = userRepository.findByEmailWithDeleted(email);
 
         // Optional 에서 유저정보 꺼내기
         // 존재하지 않는 이메일 입력시 404 반환

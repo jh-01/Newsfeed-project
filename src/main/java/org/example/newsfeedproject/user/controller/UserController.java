@@ -127,7 +127,11 @@ public class UserController {
         // 유저가 자기정보를 바꾸려고 하는지 검증
         userService.isSameUser(id, sessionUserDto);
 
+        // 회원탈퇴 수행
         userService.deleteUser(id, password);
+
+        // 세션 삭제
+        session.invalidate();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
