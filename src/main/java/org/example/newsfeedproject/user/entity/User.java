@@ -41,6 +41,15 @@ public class User extends BaseTimeEntity {
     @Column
     private boolean is_deleted;
 
+    // 정보를 모두 포함한 생성자
+    public User(Long id, String email, String nickname, String password, boolean is_deleted) {
+        this.id = id;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.is_deleted = is_deleted;
+    }
+
     public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
