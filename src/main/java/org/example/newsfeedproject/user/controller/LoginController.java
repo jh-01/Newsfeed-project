@@ -1,14 +1,14 @@
-package org.example.newsfeedproject.controller;
+package org.example.newsfeedproject.user.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.constant.Const;
-import org.example.newsfeedproject.dto.LoginReqeustDto;
-import org.example.newsfeedproject.dto.LoginResponseDto;
-import org.example.newsfeedproject.dto.SessionUserDto;
-import org.example.newsfeedproject.loginservice.LoginService;
+import org.example.newsfeedproject.user.dto.LoginReqeustDto;
+import org.example.newsfeedproject.user.dto.LoginResponseDto;
+import org.example.newsfeedproject.user.dto.SessionUserDto;
+import org.example.newsfeedproject.user.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

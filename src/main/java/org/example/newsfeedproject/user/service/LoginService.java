@@ -1,6 +1,7 @@
-package org.example.newsfeedproject.loginservice;
+package org.example.newsfeedproject.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
