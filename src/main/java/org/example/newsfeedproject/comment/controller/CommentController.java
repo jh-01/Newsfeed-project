@@ -80,4 +80,21 @@ public class CommentController {
         CommentResponse response = commentService.modifyComment(id, 1L, modifyRequest.getComments());
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/id")
+    public ResponseEntity<String> deleteComment(
+            HttpServletRequest request,
+            @PathVariable Long id
+    ) {
+        HttpSession session = request.getSession(false);
+        if(session == null) {
+            throw new RuntimeException("로그인을 해주세요.");
+        }
+        // session에 저장된 유저정보 조회
+        // UserResponseDto loginUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
+
+        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
+        commentService.deleteComment(id);
+        return ResponseEntity.ok("댓글 삭제가 완료되었습니다.");
+    }
 }
