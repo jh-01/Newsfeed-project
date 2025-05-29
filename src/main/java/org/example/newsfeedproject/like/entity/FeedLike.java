@@ -1,4 +1,4 @@
-package org.example.newsfeedproject.friend.entity;
+package org.example.newsfeedproject.like.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,13 +18,12 @@ public class FeedLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
     @ManyToOne
     @JoinColumn(name = "feed_id")
-    private Feed commentId;
+    private Feed feedId;
 
 }
