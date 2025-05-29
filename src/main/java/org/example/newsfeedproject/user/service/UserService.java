@@ -26,7 +26,11 @@ public class UserService {
 
         // 닉네임 같은 경우 오류 로직 구상해야함
 
-        return new UserResponseDto(saveUser.getId(), saveUser.getEmail(), saveUser.getNickname(), saveUser.getCreatedAt(), saveUser.getModifiedAt());
+        return new UserResponseDto(saveUser.getId(),
+                saveUser.getEmail(),
+                saveUser.getNickname(),
+                saveUser.getCreatedAt(),
+                saveUser.getModifiedAt());
 
     }
 
@@ -34,7 +38,11 @@ public class UserService {
     public UserResponseDto findById(Long id) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getCreatedAt(), user.getModifiedAt());
+        return new UserResponseDto(user.getId(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getCreatedAt(),
+                user.getModifiedAt());
     }
 
 
@@ -68,7 +76,11 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getCreatedAt(),user.getModifiedAt());
+        return new UserResponseDto(user.getId(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getCreatedAt(),
+                user.getModifiedAt());
     }
 
     // 비밀번호 수정
@@ -90,7 +102,7 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         // 비밀번호 받아와서 삭제할지 결정해야함
-        // 받아와서 삭제할거면 비밀번호 인코딩한 값을 반환
+        // 받아와서 삭제할거면 비밀번호 디코딩 후 삭제처리
 
         userRepository.delete(user);
     }
