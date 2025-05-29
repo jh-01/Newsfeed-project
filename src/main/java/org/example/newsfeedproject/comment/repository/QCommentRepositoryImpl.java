@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.dto.QCommentResponse;
 import static org.example.newsfeedproject.comment.entity.QComment.comment;
-import static org.example.newsfeedproject.friend.entity.QCommentLike.commentLike;
+import static org.example.newsfeedproject.like.entity.QCommentLike.commentLike;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
