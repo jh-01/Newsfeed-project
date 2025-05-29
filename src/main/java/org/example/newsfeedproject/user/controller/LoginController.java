@@ -51,7 +51,7 @@ public class LoginController {
         // 세션생성
         HttpSession session = request.getSession();
 
-        // 세션에 저장할 값에 닉네임과 이메일만 남김.
+        // 세션에 저장할 값에 닉네임, 이메일, id 값만 남김.
         SessionUserDto sessionDto = new SessionUserDto(
                 user.getNickname(),
                 user.getEmail(),
