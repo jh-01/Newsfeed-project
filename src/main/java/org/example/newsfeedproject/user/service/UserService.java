@@ -110,7 +110,7 @@ public class UserService {
         String userEmail = sessionUserDto.getEmail();
 
         // 비교된 이메일이 다르면 401 반환
-        if(userEmail.equals(user.getEmail())) {
+        if(!userEmail.equals(user.getEmail())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
