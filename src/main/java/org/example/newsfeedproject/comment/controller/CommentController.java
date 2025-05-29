@@ -7,9 +7,10 @@ import org.example.newsfeedproject.comment.dto.CommentCreateRequest;
 import org.example.newsfeedproject.comment.dto.CommentModifyRequest;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.service.CommentService;
+import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.example.newsfeedproject.user.constant.Const;
 import java.util.List;
 
 @RestController
@@ -30,10 +31,10 @@ public class CommentController {
         }
 
         // session에 저장된 유저정보 조회
-        // UserResponseDto loginUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
+        SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        CommentResponse response = commentService.saveComment(createRequest.getFeedId(), 1L, createRequest.getComments());
+        CommentResponse response = commentService.saveComment(createRequest.getFeedId(), loginUser.getId(), createRequest.getComments());
         return ResponseEntity.ok(response);
     }
 
@@ -47,10 +48,10 @@ public class CommentController {
             throw new RuntimeException("로그인을 해주세요.");
         }
         // session에 저장된 유저정보 조회
-        // UserResponseDto loginUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
+        SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        List<CommentResponse> commentResponseList = commentService.getAllComments(id, 1L);
+        List<CommentResponse> commentResponseList = commentService.getAllComments(id, loginUser.getId());
         return ResponseEntity.ok(commentResponseList);
     }
 
@@ -74,10 +75,10 @@ public class CommentController {
             throw new RuntimeException("로그인을 해주세요.");
         }
         // session에 저장된 유저정보 조회
-        // UserResponseDto loginUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
+        SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        CommentResponse response = commentService.modifyComment(id, 1L, modifyRequest.getComments());
+        CommentResponse response = commentService.modifyComment(id, loginUser.getId(), modifyRequest.getComments());
         return ResponseEntity.ok(response);
     }
 
@@ -90,8 +91,6 @@ public class CommentController {
         if(session == null) {
             throw new RuntimeException("로그인을 해주세요.");
         }
-        // session에 저장된 유저정보 조회
-        // UserResponseDto loginUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
         commentService.deleteComment(id);

@@ -7,6 +7,7 @@ import org.example.newsfeedproject.comment.entity.Comment;
 import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.feed.entity.Feed;
 import org.example.newsfeedproject.user.entity.User;
+import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,10 +18,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CommentService {
 
-    private static CommentRepository commentRepository;
+      private static CommentRepository commentRepository;
 //    private static FeedRepository feedRepository;
 //    private static UserRepository userRepository;
-
+//
 //    public CommentService(CommentRepository commentRepository, UserRepository userRepository, FeedRepository feedRepository) {
 //        this.commentRepository = commentRepository;
 //        this.userRepository = userRepository;
