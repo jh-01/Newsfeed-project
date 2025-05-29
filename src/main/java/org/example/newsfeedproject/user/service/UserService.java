@@ -20,6 +20,8 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
+
+
     // 유저 생성 - 회원가입
     public UserResponseDto signup(String email, String password, String nickName) {
 
@@ -36,6 +38,8 @@ public class UserService {
         return new UserResponseDto(saveUser.getId(), saveUser.getEmail(), saveUser.getNickname(), saveUser.getCreatedAt(), saveUser.getModifiedAt());
 
     }
+
+
 
     // 유저 조회
     public UserResponseDto findById(Long id) {
@@ -54,6 +58,8 @@ public class UserService {
                 .toList();
     }
 
+
+
     @Transactional
     // 유저 프로필 수정
     public UserResponseDto modifyProfile(Long id,String email, String nickname) {
@@ -67,6 +73,8 @@ public class UserService {
 
         return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getCreatedAt(),user.getModifiedAt());
     }
+
+
 
     // 비밀번호 수정
     @Transactional
@@ -84,6 +92,8 @@ public class UserService {
         // 비밀번호 변경
         user.updatePassword(newPassword);
     }
+
+
 
     // 유저 삭제
     @Transactional
@@ -104,6 +114,8 @@ public class UserService {
         // 활성화한 삭제여부 반영
         userRepository.save(user);
     }
+
+
 
     // 로그인한 유저가 자기정보를 바꾸려고 하는지 검증
     public void isSameUser(Long id, SessionUserDto sessionUserDto) {

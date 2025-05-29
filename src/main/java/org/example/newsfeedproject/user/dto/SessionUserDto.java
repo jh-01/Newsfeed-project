@@ -1,13 +1,15 @@
 package org.example.newsfeedproject.user.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class SessionUserDto {
 
-    private final String nickname;
-    private final String email;
-    private final Long id;
+    private String nickname;
+    private String email;
+    private Long id;
 
     public SessionUserDto(String nickname, String email, Long id) {
         this.nickname = nickname;

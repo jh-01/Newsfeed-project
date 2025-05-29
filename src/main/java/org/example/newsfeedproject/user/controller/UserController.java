@@ -18,6 +18,8 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+
+
     // 유저 생성 ( 회원가입 )
     @PostMapping
     public ResponseEntity<UserResponseDto> signup(@RequestBody UserRequestDto userRequestDto) {
@@ -26,6 +28,8 @@ public class UserController {
 
         return new ResponseEntity<>(singupUserResponseDto, HttpStatus.CREATED);
     }
+
+
 
     // 특정 사용자 조회
     @GetMapping("/{id}")
@@ -36,6 +40,8 @@ public class UserController {
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
+
+
     // 전체 유저 조회
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> findAll(){
@@ -44,6 +50,8 @@ public class UserController {
 
         return new ResponseEntity<>(findAllUser,HttpStatus.OK);
     }
+
+
 
     // 프로필 수정
     @PutMapping("/{id}")
@@ -62,10 +70,21 @@ public class UserController {
         // 유저가 자기정보를 바꾸려고 하는지 검증
         userService.isSameUser(id, sessionUserDto);
 
+        // 수정 진행
         UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto.getEmail(), updateProfileDto.getNickname());
+
+        // 세션 value 갱신
+        sessionUserDto.setEmail(userResponseDto.getEmail());
+        sessionUserDto.setNickname(userResponseDto.getNickname());
+
+        // 세션 갱신
+        session.setAttribute(Const.USER,sessionUserDto);
+
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
+
+
 
     // 비밀번호 수정
     @PatchMapping("/{id}")
@@ -89,6 +108,8 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+
     // 유저 삭제 ( 회원 탈퇴 )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
@@ -110,6 +131,8 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
     // 유저 친구 조회
     // 친구 로직 보고 만들어야함
