@@ -1,14 +1,15 @@
-package org.example.newsfeedproject.controller;
+package org.example.newsfeedproject.user.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.constant.Const;
-import org.example.newsfeedproject.dto.LoginReqeustDto;
-import org.example.newsfeedproject.dto.LoginResponseDto;
-import org.example.newsfeedproject.dto.SessionUserDto;
-import org.example.newsfeedproject.loginservice.LoginService;
+import org.example.newsfeedproject.user.dto.LoginReqeustDto;
+import org.example.newsfeedproject.user.dto.LoginResponseDto;
+import org.example.newsfeedproject.user.dto.SessionUserDto;
+import org.example.newsfeedproject.user.entity.User;
+import org.example.newsfeedproject.user.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +30,12 @@ public class LoginController {
             HttpServletRequest request
             ) {
 
-        // 유저 정보를 받아옴
-        User user = loginService.bringUserInfo(dto.getEmail(), dto.getPassword());
+        // 유저 정보를 모두 받아옴
+        User user = loginService.bringUserInfo(
+                dto.getEmail(),
+                dto.getPassword());
 
-        // 비밀번호가 틀리면 401 반환 -> bcrypt 로 검증
+        // 비밀번호가 틀리면 401 반환 -> BCrypt 로 검증
         if(!BCrypt.verifyer().verify(
                 dto.getPassword().toCharArray(),
                 user.getPassword()
@@ -41,17 +44,18 @@ public class LoginController {
         }
 
         // 삭제된 유저이면 400 반환
-        if(user.getIsDeleted) {
+        if(user.is_deleted()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         // 세션생성
         HttpSession session = request.getSession();
 
-        // 세션에 저장할 값에 닉네임과 이메일만 남김.
+        // 세션에 저장할 값에 닉네임, 이메일, id 값만 남김.
         SessionUserDto sessionDto = new SessionUserDto(
                 user.getNickname(),
-                user.getEmail()
+                user.getEmail(),
+                user.getId()
         );
 
         // 세션에 값 저장

@@ -1,4 +1,4 @@
-package org.example.newsfeedproject.dto;
+package org.example.newsfeedproject.user.dto;
 
 import lombok.Getter;
 
