@@ -57,10 +57,10 @@ public class UserService {
     // 유저 프로필 수정
     public UserResponseDto modifyProfile(Long id,String email, String nickname) {
 
+        // Optional 에서 이미 예외처리를 했기 때문에 null 이 아님.
         User user = userRepository.findByIdOrElseThrow(id);
-        user.modifyProfile(email, nickname);
 
-        // 예외처리 작성 ( 이메일 = null or nickname = null )
+        user.modifyProfile(email, nickname);
 
         userRepository.save(user);
 

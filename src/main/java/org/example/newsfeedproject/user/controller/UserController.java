@@ -53,9 +53,17 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> modifyProfile(
             @PathVariable Long id,
-            @RequestBody UpdateProfileDto updateProfileDto) {
+            @RequestBody UpdateProfileDto updateProfileDto,
+            HttpServletRequest request
+    ) {
 
-        // 세션 or Token 확인 작업 필요
+        // 세션 가져오기
+        HttpSession session = request.getSession();
+
+        // 세션 없을시 404 반환
+        if(session == null || session.getAttribute(Const.USER) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
         UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto.getEmail(), updateProfileDto.getNickname());
 
