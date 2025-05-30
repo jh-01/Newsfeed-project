@@ -4,7 +4,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeedproject.constant.Const;
+import org.example.newsfeedproject.user.constant.Const;
 import org.example.newsfeedproject.user.dto.LoginReqeustDto;
 import org.example.newsfeedproject.user.dto.LoginResponseDto;
 import org.example.newsfeedproject.user.dto.SessionUserDto;

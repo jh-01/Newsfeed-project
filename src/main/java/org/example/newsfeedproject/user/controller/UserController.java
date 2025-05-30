@@ -3,7 +3,7 @@ package org.example.newsfeedproject.user.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeedproject.constant.Const;
+import org.example.newsfeedproject.user.constant.Const;
 import org.example.newsfeedproject.user.dto.*;
 import org.example.newsfeedproject.user.service.UserService;
 import org.springframework.http.HttpStatus;
