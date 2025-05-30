@@ -1,15 +1,20 @@
 package org.example.newsfeedproject.comment.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.entity.Comment;
 import org.example.newsfeedproject.comment.exception.CommentNotFoundException;
 import org.example.newsfeedproject.comment.exception.CommentUnauthorizedException;
+import org.example.newsfeedproject.comment.exception.FeedNotFoundException;
+import org.example.newsfeedproject.comment.exception.UserDeactivatedException;
 import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.feed.entity.Feed;
+import org.example.newsfeedproject.feed.repository.FeedRepository;
 import org.example.newsfeedproject.like.repository.CommentLikeRepository;
 import org.example.newsfeedproject.user.entity.User;
+import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
@@ -21,9 +26,9 @@ public class CommentService {
 
       private static CommentRepository commentRepository;
       private static CommentLikeRepository commentLikeRepository;
-//    private static FeedRepository feedRepository;
-//    private static UserRepository userRepository;
-//
+    private static FeedRepository feedRepository;
+    private static UserRepository userRepository;
+
 //    public CommentService(CommentRepository commentRepository, UserRepository userRepository, FeedRepository feedRepository) {
 //        this.commentRepository = commentRepository;
 //        this.userRepository = userRepository;
@@ -33,15 +38,14 @@ public class CommentService {
 
     @Transactional
     public CommentResponse saveComment(Long feedId, Long userId, String comments){
-//        final Feed feed = feedRepository.findById(feedId)
-//                .orElseThrow(() -> new FeedNotFoundException("Feed not found. id = " + feedId));
-//        final User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new EntityNotFoundException("User not found. id = " + userId));
-        // 탈퇴한 유저일 경우 오류 반환
-//
+        final Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new FeedNotFoundException(feedId));
+        final User user = userRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new);
 
-        Feed feed = new Feed(feedId);
-        User user = new User(userId);
+        // 탈퇴한 유저일 경우 오류 반환
+        if(user.is_deleted()) throw new UserDeactivatedException(userId);
+
         final Comment comment = Comment.builder()
                 .feed(feed)
                 .user(user)
@@ -56,9 +60,9 @@ public class CommentService {
     @Transactional
     public List<CommentResponse> getAllComments(Long feedId, Long userId){
         // 피드 존재 여부 확인
-//        if (!feedRepository.existsById(feedId)) {
-//            throw new FeedNotFoundException(feedId);
-//        }
+        if (!feedRepository.existsById(feedId)) {
+            throw new FeedNotFoundException(feedId);
+        }
         return commentRepository.findAllByFeedId(feedId, userId);
     }
 

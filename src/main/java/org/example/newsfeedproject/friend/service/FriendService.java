@@ -11,6 +11,7 @@ import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +54,22 @@ public class FriendService {
 
     public List<FindFriendResponseDto> find(HttpServletRequest request){
 
+//        User loginUser = (User) request.getSession().getAttribute("user");
+//        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
+//
+//        return friendRepository.findAllByUserId(me.getId()).stream().map(FindFriendResponseDto::toDto).toList();
+//
+
+        // 로그인한 유저 세션에서 가져오기
         User loginUser = (User) request.getSession().getAttribute("user");
         User me = userRepository.findByIdOrElseThrow(loginUser.getId());
 
-        return friendRepository.findAllByUserId(me.getId()).stream().map(FindFriendResponseDto::toDto).toList();
+        // 내가 등록한 친구 목록 조회
+        List<Friend> friendList = friendRepository.findAllByUserId(me);
 
+        // friendUser 정보만 DTO로 변환해서 반환
+        return friendList.stream()
+                .map(friend -> FindFriendResponseDto.toDto(friend))
+                .collect(Collectors.toList());
     }
 }

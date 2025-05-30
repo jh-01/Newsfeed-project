@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CommentLikeService {
@@ -24,13 +26,14 @@ public class CommentLikeService {
 
         Comment comment = commentRepository.findByIdOrElseThrow(id);
 
-        CommentLike commentLike = commentLikeRepository.findByUserIdAndCommentId(user.getId(), comment.getId());
+        Optional<CommentLike> optionalCommentLike = commentLikeRepository.findByUserIdAndCommentId(user, comment);
 
-        if (commentLike != null) {
+
+        if (optionalCommentLike != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복 좋아요는 불가합니다.");
         }
 
-        likeRepository.save(commentLike);
+        commentLikeRepository.save(optionalCommentLike.get());
 
     }
 
@@ -42,7 +45,7 @@ public class CommentLikeService {
 
         CommentLike commentLike = new CommentLike(user, comment);
 
-        likeRepository.delete(commentLike);
+        commentLikeRepository.delete(commentLike);
 
     }
 }
