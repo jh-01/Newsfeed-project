@@ -13,13 +13,12 @@ import org.example.newsfeedproject.user.entity.User;
 @Entity
 @Table(name = "comment")
 @NoArgsConstructor
+@Getter
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
-    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
