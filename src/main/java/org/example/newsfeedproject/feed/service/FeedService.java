@@ -27,10 +27,12 @@ public class FeedService {
      * 게시글 새로 생성
      *
      * @param requestDto 사용자가 입력한 제목/내용
-     * @param user 현재 로그인한 사용자
+     * @param user 현재 로그인한 사용자 (null 허용 → 예외 처리)
      * @return 생성된 게시글 정보
      */
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
+        validateUser(user); // 인증되지 않은 유저 차단
+
         Feed feed = new Feed(user, requestDto.getTitle(), requestDto.getContents());
         Feed savedFeed = feedRepository.save(feed);
         return new FeedResponseDto(savedFeed);
@@ -63,11 +65,13 @@ public class FeedService {
      *
      * @param id 수정할 게시글 ID
      * @param requestDto 수정할 제목/내용
-     * @param user 현재 로그인한 사용자
+     * @param user 현재 로그인한 사용자 (null 허용 → 예외 처리)
      * @return 수정된 게시글 정보
      */
     @Transactional
     public FeedResponseDto updateFeed(Long id, FeedRequestDto requestDto, User user) {
+        validateUser(user); // 인증되지 않은 유저 차단
+
         Feed feed = findFeed(id);
         validateWriter(feed, user); // 작성자 확인
         feed.update(requestDto.getTitle(), requestDto.getContents());
@@ -78,9 +82,11 @@ public class FeedService {
      * 게시글 삭제
      *
      * @param id 삭제할 게시글 ID
-     * @param user 현재 로그인한 사용자
+     * @param user 현재 로그인한 사용자 (null 허용 → 예외 처리)
      */
     public void deleteFeed(Long id, User user) {
+        validateUser(user); // 인증되지 않은 유저 차단
+
         Feed feed = findFeed(id);
         validateWriter(feed, user); // 작성자 확인
         feedRepository.delete(feed);
@@ -106,6 +112,17 @@ public class FeedService {
     private void validateWriter(Feed feed, User user) {
         if (!feed.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("작성자만 수정/삭제할 수 있습니다.");
+        }
+    }
+
+    /**
+     * 유저가 null인 경우 예외 발생 (스프링 시큐리티 미적용 상태 고려)
+     *
+     * @param user 현재 로그인한 사용자
+     */
+    private void validateUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("로그인 후 이용해 주세요.");
         }
     }
 }
