@@ -14,4 +14,10 @@ public class LoginFailureHandler {
         return new ResponseEntity<>("로그인 실패 : 비밀번호가 틀립니다.",HttpStatus.UNAUTHORIZED);
     }
 
+    // 삭제된 유저면 400 반환
+    @ExceptionHandler(DeletedUserException.class)
+    public ResponseEntity<String> DeletedUserException (DeletedUserException e) {
+        return new ResponseEntity<>("로그인 실패 : 탈퇴한 유저입니다.", HttpStatus.BAD_REQUEST);
+    }
+
 }
