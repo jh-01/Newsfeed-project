@@ -28,7 +28,6 @@ public class CommentLikeService {
 
         Optional<CommentLike> optionalCommentLike = commentLikeRepository.findByUserIdAndCommentId(user, comment);
 
-
         if (optionalCommentLike != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복 좋아요는 불가합니다.");
         }
