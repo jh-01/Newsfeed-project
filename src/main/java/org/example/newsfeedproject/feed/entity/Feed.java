@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
  * - User와 다대일(N:1) 관계로 매핑
  */
 @Entity
+@Table(name = "feed")
 @Getter
 @NoArgsConstructor
 public class Feed {
