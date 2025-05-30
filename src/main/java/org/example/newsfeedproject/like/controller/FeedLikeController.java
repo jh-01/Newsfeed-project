@@ -2,6 +2,7 @@ package org.example.newsfeedproject.like.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeedproject.like.dto.FeedLikeRequestDto;
 import org.example.newsfeedproject.like.service.FeedLikeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ public class FeedLikeController {
     private final FeedLikeService feedlikeService;
 
     @PostMapping
-    public ResponseEntity<Void> feedLike(@RequestBody Long id, HttpServletRequest request) {
+    public ResponseEntity<Void> feedLike(@RequestBody FeedLikeRequestDto dto, HttpServletRequest request) {
 
-        feedlikeService.feedLike(id, request);
+        feedlikeService.feedLike(dto.getId(), request);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

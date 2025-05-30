@@ -28,5 +28,7 @@ public class Friend {
     private User friendId;
 
     public Friend(User me, User friend) {
+        this.userId = me;
+        this.friendId = friend;
     }
 }
