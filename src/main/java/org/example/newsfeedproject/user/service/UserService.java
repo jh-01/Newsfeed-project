@@ -4,6 +4,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeedproject.user.dto.SessionUserDto;
+import org.example.newsfeedproject.user.dto.UpdateProfileDto;
 import org.example.newsfeedproject.user.dto.UserResponseDto;
 import org.example.newsfeedproject.user.entity.User;
 import org.example.newsfeedproject.user.repository.UserRepository;
@@ -62,16 +63,30 @@ public class UserService {
 
     @Transactional
     // 유저 프로필 수정
-    public UserResponseDto modifyProfile(Long id,String email, String nickname) {
+    public UserResponseDto modifyProfile(Long id, UpdateProfileDto request) {
 
-        // Optional 에서 이미 예외처리를 했기 때문에 null 이 아님.
         User user = userRepository.findByIdOrElseThrow(id);
 
-        user.modifyProfile(email, nickname);
+        /*
+           값이 null이 아닐 때만 수정
+           email 이나 nickname 값 중 하나만 들어와도 변경
+         */
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            user.setEmail(request.getEmail());
+        }
+        if (request.getNickname() != null && !request.getNickname().isBlank()) {
+            user.setNickname(request.getNickname());
+        }
+
+        // 예외처리 작성 ( NPE ) 해결해야함
 
         userRepository.save(user);
 
-        return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getCreatedAt(),user.getModifiedAt());
+        return new UserResponseDto(user.getId(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getCreatedAt(),
+                user.getModifiedAt());
     }
 
 

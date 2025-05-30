@@ -7,11 +7,13 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.newsfeedproject.common.entity.BaseTimeEntity;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
+@Setter
 @Getter
 @Table(name = "user")
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
