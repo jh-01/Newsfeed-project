@@ -45,4 +45,9 @@ public class QCommentRepositoryImpl implements QCommentRepository{
                 .where(comment.feed.id.eq(feedId))
                 .fetch();
     }
+
+    @Override
+    public void deleteByFeedId(Long feedId) {
+
+    }
 }

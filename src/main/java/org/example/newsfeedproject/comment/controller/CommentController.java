@@ -91,9 +91,11 @@ public class CommentController {
         if(session == null) {
             throw new RuntimeException("로그인을 해주세요.");
         }
+        // session에 저장된 유저정보 조회
+        SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        commentService.deleteComment(id);
+        commentService.deleteComment(id, loginUser.getId());
         return ResponseEntity.ok("댓글 삭제가 완료되었습니다.");
     }
 }
