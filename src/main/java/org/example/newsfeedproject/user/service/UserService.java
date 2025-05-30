@@ -21,10 +21,21 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-
-
     // 유저 생성 - 회원가입
     public UserResponseDto signup(String email, String password, String nickName) {
+
+        // 저장된 유저 불러오기
+        List<User> findAllUser = userRepository.findAll();
+
+//         닉네임, 이메일 중복 예외 처리
+        for(User user1: findAllUser){
+            if(user1.getNickname().equals(nickName)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"닉네임이 중복됩니다.");
+            }
+            if(user1.getEmail().equals(email)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"이메일이 중복됩니다.");
+            }
+        }
 
         // BCrypt 로 인코딩
         String encodedPassword = BCrypt.withDefaults().hashToString(10, password.toCharArray());
@@ -32,10 +43,8 @@ public class UserService {
         // 인코딩된 정보로 유저생성
         User user = new User(email, encodedPassword, nickName);
 
+
         User saveUser = userRepository.save(user);
-
-        // 닉네임 같은 경우 오류 로직 구상해야함
-
         return new UserResponseDto(saveUser.getId(), saveUser.getEmail(), saveUser.getNickname(), saveUser.getCreatedAt(), saveUser.getModifiedAt());
 
     }
