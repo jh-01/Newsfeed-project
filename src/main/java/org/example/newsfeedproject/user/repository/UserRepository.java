@@ -1,7 +1,6 @@
 package org.example.newsfeedproject.user.repository;
 
 import org.example.newsfeedproject.user.entity.User;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,10 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     default User findByIdOrElseThrow(Long id){
         return findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"유저를 찾을 수 없습니다."));
     }
-
-    // 중복된 이메일, 중복된 닉네임 검증 로직 작성
-    @Query("SELECT u.email FROM User u WHERE u.email = :email")
-    String findOneEmail(@Param("email") String email);
 
     // 이메일 검증 ( 존재하면 true, 없으면 false )
     boolean existsByEmail(String email);

@@ -12,9 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @Slf4j
@@ -82,7 +81,7 @@ public class UserService {
             }
             user.setEmail(request.getEmail());
         }
-        
+
         if (request.getNickname() != null) {
             if (userRepository.existsByNickname(request.getNickname())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 닉네임입니다.");
