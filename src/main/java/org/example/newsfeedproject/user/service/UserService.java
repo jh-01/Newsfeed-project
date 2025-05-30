@@ -112,8 +112,11 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
+        // 수정된 비밀번호 암호화
+        String encodedNewPassword = BCrypt.withDefaults().hashToString(10,newPassword.toCharArray());
+
         // 비밀번호 변경
-        user.updatePassword(newPassword);
+        user.updatePassword(encodedNewPassword);
     }
 
 

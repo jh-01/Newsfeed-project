@@ -6,7 +6,7 @@ import org.example.newsfeedproject.friend.entity.Friend;
 
 @Getter
 @AllArgsConstructor
-public class FindFriendResponseDto {
+public class FriendsResponseDto {
 
     private final Long id;
 
@@ -14,7 +14,7 @@ public class FindFriendResponseDto {
 
     private final String email;
 
-    public static FindFriendResponseDto toDto(Friend friend) {
-        return new FindFriendResponseDto(friend.getId(), friend.getFriendId().getNickname(), friend.getFriendId().getEmail());
+    public static FriendsResponseDto toDto(Friend friend) {
+        return new FriendsResponseDto(friend.getId(), friend.getFriendId().getNickname(), friend.getFriendId().getEmail());
     }
 }

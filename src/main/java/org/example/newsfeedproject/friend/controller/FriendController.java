@@ -2,7 +2,7 @@ package org.example.newsfeedproject.friend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeedproject.friend.dto.FindFriendResponseDto;
+import org.example.newsfeedproject.friend.dto.FriendsResponseDto;
 import org.example.newsfeedproject.friend.dto.AddFriendRequestDto;
 import org.example.newsfeedproject.friend.dto.AddFriendResponseDto;
 import org.example.newsfeedproject.friend.service.FriendService;
@@ -19,14 +19,13 @@ public class FriendController {
 
     private final FriendService friendService;
 
-    // 유저로 옮겨야함
-//    @GetMapping("/search")
-//    public ResponseEntity<List<SearchUsersResponseDto>> search(@RequestParam String nickname){
-//
-//        List<SearchUsersResponseDto> searchUsersResponseDtoList = userService.search(nickname);
-//
-//        return new ResponseEntity<>(searchUsersResponseDtoList, HttpStatus.OK);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<List<FriendsResponseDto>> search(@RequestParam String nickname, HttpServletRequest request){
+
+        List<FriendsResponseDto> searchUsersResponseDtoList = friendService.search(nickname, request);
+
+        return new ResponseEntity<>(searchUsersResponseDtoList, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<AddFriendResponseDto> add(@RequestBody AddFriendRequestDto dto, HttpServletRequest request){
@@ -45,9 +44,9 @@ public class FriendController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FindFriendResponseDto>> find(HttpServletRequest request){
+    public ResponseEntity<List<FriendsResponseDto>> find(HttpServletRequest request){
 
-        List<FindFriendResponseDto> findFriendResponseDtoList = friendService.find(request);
+        List<FriendsResponseDto> findFriendResponseDtoList = friendService.find(request);
 
         return new ResponseEntity<>(findFriendResponseDtoList, HttpStatus.OK);
     }

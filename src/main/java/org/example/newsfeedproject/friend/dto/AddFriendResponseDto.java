@@ -11,8 +11,4 @@ public class AddFriendResponseDto {
 
     private final String email;
 
-    // UserResponseDto로 옮겨야함
-//    public static UserResponseDto toDto(User user) {
-//        return new UserResponseDto(user.getId(), user.getNickname(), user.getEmail());
-//    }
 }
