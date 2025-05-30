@@ -17,7 +17,7 @@ import java.util.List;
  * - 게시글 작성, 조회, 수정, 삭제 API 제공
  */
 @RestController
-@RequestMapping("/api/feeds")
+@RequestMapping("/feeds")
 @RequiredArgsConstructor
 public class FeedController {
 
