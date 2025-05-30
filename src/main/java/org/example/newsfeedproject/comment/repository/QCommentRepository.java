@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface QCommentRepository {
     List<CommentResponse> findAllByFeedId(Long feedId, Long userId);
+
+    void deleteByFeedId(Long feedId);
 }
