@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class AddFriendRequestDto {
 
-    private final Long Id;
+    private final Long id;
 
 }
