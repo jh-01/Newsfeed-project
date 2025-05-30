@@ -27,7 +27,7 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "feed_id", nullable = false)
     private Feed feed;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     @Setter
     private String comments;
 

@@ -2,6 +2,8 @@ package org.example.newsfeedproject.like.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeedproject.comment.entity.Comment;
+import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.like.entity.CommentLike;
 import org.example.newsfeedproject.like.repository.CommentLikeRepository;
 import org.example.newsfeedproject.user.entity.User;

@@ -10,10 +10,7 @@ import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.feed.entity.Feed;
 import org.example.newsfeedproject.like.repository.CommentLikeRepository;
 import org.example.newsfeedproject.user.entity.User;
-import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,9 +34,11 @@ public class CommentService {
     @Transactional
     public CommentResponse saveComment(Long feedId, Long userId, String comments){
 //        final Feed feed = feedRepository.findById(feedId)
-//                .orElseThrow(() -> new EntityNotFoundException("Schedule not found. id = " + feedId));
-//        final User feed = userRepository.findById(feedId)
-//                .orElseThrow(() -> new EntityNotFoundException("Schedule not found. id = " + feedId));
+//                .orElseThrow(() -> new FeedNotFoundException("Feed not found. id = " + feedId));
+//        final User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new EntityNotFoundException("User not found. id = " + userId));
+        // 탈퇴한 유저일 경우 오류 반환
+//
 
         Feed feed = new Feed(feedId);
         User user = new User(userId);
