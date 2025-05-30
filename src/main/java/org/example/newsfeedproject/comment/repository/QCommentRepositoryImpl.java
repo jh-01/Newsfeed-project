@@ -7,6 +7,8 @@ import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.dto.QCommentResponse;
 import static org.example.newsfeedproject.comment.entity.QComment.comment;
 import static org.example.newsfeedproject.like.entity.QCommentLike.commentLike;
+
+import org.example.newsfeedproject.comment.entity.Comment;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -49,5 +51,10 @@ public class QCommentRepositoryImpl implements QCommentRepository{
     @Override
     public void deleteByFeedId(Long feedId) {
 
+    }
+
+    @Override
+    public Comment findByIdOrElseThrow(Long id) {
+        return null;
     }
 }

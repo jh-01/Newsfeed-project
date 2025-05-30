@@ -2,7 +2,6 @@ package org.example.newsfeedproject.comment.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import org.example.newsfeedproject.comment.entity.Comment;
-
 import java.time.LocalDateTime;
 
 public class CommentResponse {
