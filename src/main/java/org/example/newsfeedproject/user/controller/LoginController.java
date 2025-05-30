@@ -9,6 +9,8 @@ import org.example.newsfeedproject.user.dto.LoginReqeustDto;
 import org.example.newsfeedproject.user.dto.LoginResponseDto;
 import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.example.newsfeedproject.user.entity.User;
+import org.example.newsfeedproject.user.login_exception.DeletedUserException;
+import org.example.newsfeedproject.user.login_exception.PasswordMismatchException;
 import org.example.newsfeedproject.user.service.LoginService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +42,12 @@ public class LoginController {
                 dto.getPassword().toCharArray(),
                 user.getPassword()
         ).verified) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            throw new PasswordMismatchException("비밀번호 오류");
         }
 
         // 삭제된 유저이면 400 반환
         if(user.is_deleted()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new DeletedUserException("탈퇴한 유저");
         }
 
         // 세션생성

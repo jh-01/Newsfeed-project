@@ -38,6 +38,7 @@ public class LoginFilter implements Filter {
             if (session == null || session.getAttribute(Const.USER) == null) {
                 httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 httpResponse.setContentType("application/json");
+                httpResponse.setCharacterEncoding("UTF-8");
                 httpResponse.getWriter().write("{\"message\" : \"로그인이 필요합니다.\"}");
 
                 // 조건문 동작시 필터체인 중단
