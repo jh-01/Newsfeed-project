@@ -21,8 +21,6 @@ public class LoginController {
 
     private final LoginService loginService;
 
-
-
     // 로그인 기능
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(
