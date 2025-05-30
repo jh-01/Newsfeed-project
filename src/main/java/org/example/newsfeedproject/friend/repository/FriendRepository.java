@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface FriendRepository extends JpaRepository<Friend, Long> {
-    Collection<Object> findAllByNickname(String nickname);
+    List<Friend> findAllByNickname(String nickname);
 
     List<Friend> findAllByUserId(Long id);
 }

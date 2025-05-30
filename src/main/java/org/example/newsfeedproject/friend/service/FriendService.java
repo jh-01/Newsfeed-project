@@ -2,7 +2,7 @@ package org.example.newsfeedproject.friend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeedproject.friend.dto.FindFriendResponseDto;
+import org.example.newsfeedproject.friend.dto.FriendsResponseDto;
 import org.example.newsfeedproject.friend.dto.AddFriendResponseDto;
 import org.example.newsfeedproject.friend.entity.Friend;
 import org.example.newsfeedproject.friend.repository.FriendRepository;
@@ -19,11 +19,13 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-      // 유저로 옮겨야함
-//    public List<SearchUsersResponseDto> search(String nickname){
-//
-//        return UserRepository.findAllByNickname(nickname).stream().map(UserResponseDto::toDto).toList();
-//    }
+    public List<FriendsResponseDto> search(String nickname, HttpServletRequest request){
+
+        User loginUser = (User) request.getSession().getAttribute("user");
+        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
+
+        return friendRepository.findAllByUserId(me.getId()).stream().map(FriendsResponseDto::toDto).filter(x -> x.getNickname().contains(nickname)).toList();
+    }
 
     public AddFriendResponseDto add(HttpServletRequest request, Long id){
 
@@ -51,12 +53,12 @@ public class FriendService {
         friendRepository.delete(deleteFriend);
     }
 
-    public List<FindFriendResponseDto> find(HttpServletRequest request){
+    public List<FriendsResponseDto> find(HttpServletRequest request){
 
         User loginUser = (User) request.getSession().getAttribute("user");
         User me = userRepository.findByIdOrElseThrow(loginUser.getId());
 
-        return friendRepository.findAllByUserId(me.getId()).stream().map(FindFriendResponseDto::toDto).toList();
+        return friendRepository.findAllByUserId(me.getId()).stream().map(FriendsResponseDto::toDto).toList();
 
     }
 }
