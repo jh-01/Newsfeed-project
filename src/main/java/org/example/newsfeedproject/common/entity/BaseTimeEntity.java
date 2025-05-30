@@ -1,4 +1,4 @@
-package org.example.newsfeedproject.common;
+package org.example.newsfeedproject.common.entity;
 
 
 import jakarta.persistence.Column;
