@@ -71,7 +71,7 @@ public class UserController {
         userService.isSameUser(id, sessionUserDto);
 
         // 수정 진행
-        UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto.getEmail(), updateProfileDto.getNickname());
+        UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto);
 
         // 세션 value 갱신
         sessionUserDto.setEmail(userResponseDto.getEmail());
