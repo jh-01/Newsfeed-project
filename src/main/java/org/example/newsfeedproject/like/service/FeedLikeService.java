@@ -1,13 +1,18 @@
 package org.example.newsfeedproject.like.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeedproject.feed.entity.Feed;
+import org.example.newsfeedproject.feed.repository.FeedRepository;
 import org.example.newsfeedproject.like.entity.FeedLike;
 import org.example.newsfeedproject.like.repository.FeedLikeRepository;
 import org.example.newsfeedproject.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,15 +25,17 @@ public class FeedLikeService {
 
         User user = (User) request.getSession().getAttribute("user");
 
-        Feed feed = feedRepository.findByIdOrElseThrow(id);
+        Feed feed = feedRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 피드를 찾을 수 없습니다."));
 
-        FeedLike feedLike = feedlikeRepository.findByUserIdAndFeedId(user.getId(), feed.getId());
 
-        if (feedLike != null) {
+        Optional<FeedLike> optionalFeedLike = feedlikeRepository.findByUserIdAndFeedId(user, feed);
+
+        if (optionalFeedLike.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복 좋아요는 불가합니다.");
         }
 
-        likeRepository.save(feedLike);
+        feedlikeRepository.save(optionalFeedLike.get());
 
     }
 
@@ -36,11 +43,12 @@ public class FeedLikeService {
 
         User user = (User) request.getSession().getAttribute("user");
 
-        Feed feed = feedRepository.findByIdOrElseThrow(id);
+        Feed feed = feedRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 피드를 찾을 수 없습니다."));
 
         FeedLike feedLike = new FeedLike(user, feed);
 
-        likeRepository.delete(feedLike);
+        feedlikeRepository.delete(feedLike);
 
     }
 

@@ -28,4 +28,8 @@ public class CommentLike {
     private Comment commentId;
 
 
+    public CommentLike(User user, Comment comment) {
+        this.commentId = comment;
+        this.userId = user;
+    }
 }
