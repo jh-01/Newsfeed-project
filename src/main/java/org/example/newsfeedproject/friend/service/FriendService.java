@@ -2,7 +2,7 @@ package org.example.newsfeedproject.friend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeedproject.friend.dto.FriendsResponseDto;
+import org.example.newsfeedproject.friend.dto.FindFriendResponseDto;
 import org.example.newsfeedproject.friend.dto.AddFriendResponseDto;
 import org.example.newsfeedproject.friend.entity.Friend;
 import org.example.newsfeedproject.friend.repository.FriendRepository;
@@ -19,13 +19,11 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    public List<FriendsResponseDto> search(String nickname, HttpServletRequest request){
-
-        User loginUser = (User) request.getSession().getAttribute("user");
-        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
-
-        return friendRepository.findAllByUserId(me.getId()).stream().map(FriendsResponseDto::toDto).filter(x -> x.getNickname().contains(nickname)).toList();
-    }
+      // 유저로 옮겨야함
+//    public List<SearchUsersResponseDto> search(String nickname){
+//
+//        return UserRepository.findAllByNickname(nickname).stream().map(UserResponseDto::toDto).toList();
+//    }
 
     public AddFriendResponseDto add(HttpServletRequest request, Long id){
 
@@ -55,10 +53,22 @@ public class FriendService {
 
     public List<FriendsResponseDto> find(HttpServletRequest request){
 
+//        User loginUser = (User) request.getSession().getAttribute("user");
+//        User me = userRepository.findByIdOrElseThrow(loginUser.getId());
+//
+//        return friendRepository.findAllByUserId(me.getId()).stream().map(FindFriendResponseDto::toDto).toList();
+//
+
+        // 로그인한 유저 세션에서 가져오기
         User loginUser = (User) request.getSession().getAttribute("user");
         User me = userRepository.findByIdOrElseThrow(loginUser.getId());
 
-        return friendRepository.findAllByUserId(me.getId()).stream().map(FriendsResponseDto::toDto).toList();
+        // 내가 등록한 친구 목록 조회
+        List<Friend> friendList = friendRepository.findAllByUserId(me);
 
+        // friendUser 정보만 DTO로 변환해서 반환
+        return friendList.stream()
+                .map(friend -> FindFriendResponseDto.toDto(friend))
+                .collect(Collectors.toList());
     }
 }

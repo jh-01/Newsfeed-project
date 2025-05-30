@@ -27,4 +27,8 @@ public class FeedLike {
     @JoinColumn(name = "feed_id")
     private Feed feedId;
 
+    public FeedLike(User user, Feed feed) {
+        this.userId = user;
+        this.feedId = feed;
+    }
 }
