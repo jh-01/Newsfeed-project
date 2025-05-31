@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.feed.dto.FeedRequestDto;
 import org.example.newsfeedproject.feed.dto.FeedResponseDto;
 import org.example.newsfeedproject.feed.service.FeedService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +33,18 @@ public class FeedController {
         return ResponseEntity.ok(feedService.getFeed(id));
     }
 
+    /**
+     * 전체 게시글 목록 조회 API (페이징 처리 + 최신순)
+     *
+     * @param page 페이지 번호 (0부터 시작)
+     * @return FeedResponseDto 리스트
+     */
     @GetMapping
-    public ResponseEntity<List<FeedResponseDto>> getAllFeeds() {
-        return ResponseEntity.ok(feedService.getAllFeeds());
+    public ResponseEntity<List<FeedResponseDto>> getAllFeeds(
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        return ResponseEntity.ok(feedService.getFeedsByPage(pageRequest));
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,8 @@
 package org.example.newsfeedproject.feed.repository;
 
 import org.example.newsfeedproject.feed.entity.Feed;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +29,12 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
      * 페이지네이션 처리는 Service 단에서 Pageable로 처리
      */
     List<Feed> findAllByOrderByCreatedAtDesc();
+
+    /**
+     * 전체 게시글을 생성일 기준으로 내림차순 정렬하여 페이징 처리하여 반환
+     *
+     * @param pageable 페이지 정보
+     * @return 페이징된 게시글 목록
+     */
+    Page<Feed> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }
