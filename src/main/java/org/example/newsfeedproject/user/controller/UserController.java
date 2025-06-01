@@ -43,7 +43,7 @@ public class UserController {
 
 
     // 전체 유저 조회
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<UserResponseDto>> findAll(){
 
         List<UserResponseDto> findAllUser = userService.findAll();
@@ -71,7 +71,7 @@ public class UserController {
         userService.isSameUser(id, sessionUserDto);
 
         // 수정 진행
-        UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto.getEmail(), updateProfileDto.getNickname());
+        UserResponseDto userResponseDto = userService.modifyProfile(id, updateProfileDto);
 
         // 세션 value 갱신
         sessionUserDto.setEmail(userResponseDto.getEmail());
@@ -135,13 +135,4 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
-    // 유저 친구 조회
-    // 친구 로직 보고 만들어야함
-//    @GetMapping("/{id}/friends")
-//    public ResponseEntity<UserResponseDto> findByFriends(@PathVariable Long id){
-//
-//    }
 }
