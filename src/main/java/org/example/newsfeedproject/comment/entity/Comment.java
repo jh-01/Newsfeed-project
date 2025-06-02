@@ -31,11 +31,15 @@ public class Comment extends BaseTimeEntity {
     @Setter
     private String comments;
 
-    @Builder
-    private Comment(User user, Feed feed, String comments){
+    @OneToOne(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Setter
+    private CommentImage commentImage;
+
+    public Comment(User user, Feed feed, String comments, CommentImage commentImage){
         this.user = user;
         this.feed = feed;
         this.comments = comments;
+        this.commentImage = commentImage;
     }
 
     public static CommentResponse toDto(Comment comment){
@@ -44,6 +48,7 @@ public class Comment extends BaseTimeEntity {
                 comment.feed.getId(),
                 comment.user.getNickname(),
                 comment.comments,
+                comment.getCommentImage().getPath(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),
                 0L,

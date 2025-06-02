@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.entity.Comment;
+import org.example.newsfeedproject.comment.entity.CommentImage;
 import org.example.newsfeedproject.comment.exception.CommentNotFoundException;
 import org.example.newsfeedproject.comment.exception.CommentUnauthorizedException;
 import org.example.newsfeedproject.comment.exception.FeedNotFoundException;
@@ -16,6 +17,8 @@ import org.example.newsfeedproject.like.repository.CommentLikeRepository;
 import org.example.newsfeedproject.user.entity.User;
 import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,26 +28,33 @@ import java.util.Optional;
 public class CommentService {
 
     private CommentRepository commentRepository;
+    private CommentImageService commentImageService;
     private CommentLikeRepository commentLikeRepository;
     private FeedRepository feedRepository;
     private UserRepository userRepository;
 
 
     @Transactional
-    public CommentResponse saveComment(Long feedId, Long userId, String comments){
-        final Feed feed = feedRepository.findById(feedId)
+    public CommentResponse saveComment(Long feedId, Long userId, String comments, MultipartFile image){
+        Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new FeedNotFoundException(feedId));
-        final User user = userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new);
+
 
         // 탈퇴한 유저일 경우 오류 반환
         if(user.is_deleted()) throw new UserDeactivatedException(userId);
 
-        final Comment comment = Comment.builder()
-                .feed(feed)
-                .user(user)
-                .comments(comments)
-                .build();
+        CommentImage commentImage = null;
+        if(image != null && !image.isEmpty()){
+            String imagePath = commentImageService.uploadImage(image);
+            commentImage = new CommentImage(imagePath);
+        }
+        Comment comment = new Comment(user, feed, comments, commentImage);
+        if(commentImage != null){
+            commentImage.setComment(comment);
+        }
+
         Comment saved = commentRepository.save(comment);
 
         // 처음 작성 시 초기값 등록
@@ -68,13 +78,19 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse modifyComment(Long id, Long userId, String comments){
+    public CommentResponse modifyComment(Long id, Long userId, String comments, MultipartFile image){
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new CommentNotFoundException(id));
 
         if(!Objects.equals(comment.getUser().getId(), userId))
             throw new CommentUnauthorizedException();
         comment.setComments(comments);
+
+        // 이미지가 새로 전달된 경우
+        if(image != null && !image.isEmpty()){
+            String imagePath = commentImageService.uploadImage(image);
+            comment.getCommentImage().setPath(imagePath);
+        }
 
         commentRepository.save(comment);
 
