@@ -3,9 +3,9 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
-  "password": "1234",
-  "nickname": "테스터"
+  "email": "test1@example.com",
+  "password": "12341234",
+  "nickname": "테스터1"
 }
 
 ###
@@ -15,8 +15,8 @@ POST http://localhost:8080/users/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
-  "password": "1234"
+  "email": "test1@example.com",
+  "password": "12341234"
 }
 
 ###
@@ -130,26 +130,74 @@ Cookie-jar: session
 
 ###
 
-### ✅ 댓글 생성
+### 댓글 생성 (이미지 없이 - 수동 boundary)
 POST http://localhost:8080/comments
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 Cookie-jar: session
 
-{
-  "feedId": 1,
-  "contents": "댓글입니다."
-}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="feedId"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="comments"
+
+댓글입니다.
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ###
 
-### ✅ 댓글 수정
-PUT http://localhost:8080/comments/1
-Content-Type: application/json
+### ✅ 댓글 생성
+POST http://localhost:8080/comments
+Content-Type: multipart/form-data
 Cookie-jar: session
 
-{
-  "contents": "댓글을 수정합니다."
-}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="feedId"
+
+1
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="comments"
+
+댓글 + 이미지 테스트
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="image"; filename="example.jpg"
+Content-Type: image/jpeg
+
+< ./src/main/resources/static/uploads/images/example.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### ✅ 댓글 수정 (이미지 제외)
+PUT http://localhost:8080/comments/1
+Content-Type: multipart/form-data
+Cookie-jar: session
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="comments"
+
+댓글을 수정합니다.
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### ✅ 댓글 수정 (이미지 포함)
+PUT http://localhost:8080/comments/1
+Content-Type: multipart/form-data
+Cookie-jar: session
+
+--boundary
+Content-Disposition: form-data; name="comments"
+
+댓글을 수정합니다.
+--boundary
+Content-Disposition: form-data; name="image"; filename="updated.jpg"
+Content-Type: image/jpeg
+
+< ./updated.jpg
+--boundary--
 
 ###
 

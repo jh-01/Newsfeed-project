@@ -31,12 +31,17 @@ public class CommentResponse {
     }
 
     public static CommentResponse of(Comment saved, boolean b, long l) {
+        String imagePath = null;
+        if (saved.getCommentImage() != null) {
+            imagePath = saved.getCommentImage().getPath();
+        }
+
         return new CommentResponse(
                 saved.getId(),
                 saved.getFeed().getId(),
                 saved.getUser().getNickname(),
                 saved.getComments(),
-                saved.getCommentImage().getPath(),
+                imagePath,
                 saved.getCreatedAt(),
                 saved.getModifiedAt(),
                 l,
