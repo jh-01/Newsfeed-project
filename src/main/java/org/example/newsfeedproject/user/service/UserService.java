@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Random;
 
 
 @Service
@@ -135,6 +136,21 @@ public class UserService {
 
         // 소프트삭제 실행
         userRepository.delete(user);
+
+
+        // 패스워드 랜덤함수 돌려 바꾸기
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+
+        Random random = new Random();
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        String encodedNewPassword = BCrypt.withDefaults().hashToString(10,generatedString.toCharArray());
+
+        user.updatePassword(encodedNewPassword);
     }
 
 
