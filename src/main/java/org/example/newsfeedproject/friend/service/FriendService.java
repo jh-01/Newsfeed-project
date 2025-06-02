@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +41,15 @@ public class FriendService {
 
         User friend = userRepository.findByIdOrElseThrow(id);
 
-        Friend addFriend = new Friend(me, friend);
+        Friend myFriend = friendRepository.findByUserIdAndFriendId(me, friend);
 
-        friendRepository.save(addFriend);
+        if (myFriend != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "그와 나는 이미 짱친입니다.");
+        }
+
+        myFriend = new Friend(me, friend);
+
+        friendRepository.save(myFriend);
 
         return new AddFriendResponseDto(friend.getNickname(), friend.getEmail());
     }
@@ -56,9 +61,13 @@ public class FriendService {
 
         User friend = userRepository.findByIdOrElseThrow(id);
 
-        Friend deleteFriend = new Friend(me, friend);
+        Friend myFriend = friendRepository.findByUserIdAndFriendId(me, friend);
 
-        friendRepository.delete(deleteFriend);
+        if (myFriend == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "친구가 아닌 사람과는 절교가 불가능합니다.");
+        }
+
+        friendRepository.delete(myFriend);
     }
 
     public List<FriendsResponseDto> find(HttpServletRequest request){

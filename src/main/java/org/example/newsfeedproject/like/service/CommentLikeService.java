@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.comment.entity.Comment;
 import org.example.newsfeedproject.comment.repository.CommentRepository;
 import org.example.newsfeedproject.like.entity.CommentLike;
-import org.example.newsfeedproject.like.entity.FeedLike;
 import org.example.newsfeedproject.like.repository.CommentLikeRepository;
 import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.example.newsfeedproject.user.entity.User;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
