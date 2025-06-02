@@ -2,19 +2,23 @@ package org.example.newsfeedproject.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeedproject.user.constant.Const;
 import org.example.newsfeedproject.user.dto.*;
 import org.example.newsfeedproject.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserService userService;
 
@@ -22,7 +26,12 @@ public class UserController {
 
     // 유저 생성 ( 회원가입 )
     @PostMapping
-    public ResponseEntity<UserResponseDto> signup(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
+
+        // 비밀번호 유효성 검사
+        if(!userRequestDto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~@#$%^&+=!])(?=\\S+$).{8,15}$")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"대소문자 포함 영문 + 숫자 + 특수문자를 최소 1글자씩 포함합니다. 비밀번호는 최소 8글자 이상이어야 합니다.");
+        }
 
         UserResponseDto singupUserResponseDto = userService.signup(userRequestDto.getEmail(), userRequestDto.getPassword(), userRequestDto.getNickname());
 
