@@ -64,11 +64,11 @@ public class CommentController {
         return ResponseEntity.ok(commentResponse);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<CommentResponse> modifyComment(
             HttpServletRequest request,
             @PathVariable Long id,
-            CommentModifyRequest modifyRequest
+            @RequestBody CommentModifyRequest modifyRequest
     ){
         HttpSession session = request.getSession(false);
         if(session == null) {
@@ -82,7 +82,7 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(
             HttpServletRequest request,
             @PathVariable Long id

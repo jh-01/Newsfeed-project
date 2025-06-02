@@ -24,16 +24,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CommentService {
 
-      private static CommentRepository commentRepository;
-      private static CommentLikeRepository commentLikeRepository;
-    private static FeedRepository feedRepository;
-    private static UserRepository userRepository;
-
-//    public CommentService(CommentRepository commentRepository, UserRepository userRepository, FeedRepository feedRepository) {
-//        this.commentRepository = commentRepository;
-//        this.userRepository = userRepository;
-//        this.feedRepository = feedRepository;
-//    }
+    private CommentRepository commentRepository;
+    private CommentLikeRepository commentLikeRepository;
+    private FeedRepository feedRepository;
+    private UserRepository userRepository;
 
 
     @Transactional
@@ -76,7 +70,7 @@ public class CommentService {
     @Transactional
     public CommentResponse modifyComment(Long id, Long userId, String comments){
         Comment comment = commentRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new CommentNotFoundException(id));
 
         if(!Objects.equals(comment.getUser().getId(), userId))
             throw new CommentUnauthorizedException();
@@ -90,7 +84,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long id,Long userId){
         Comment comment = commentRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new CommentNotFoundException(id));
 
         if(!Objects.equals(comment.getUser().getId(), userId))
             throw new CommentUnauthorizedException();

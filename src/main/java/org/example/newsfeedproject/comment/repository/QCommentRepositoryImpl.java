@@ -9,6 +9,7 @@ import static org.example.newsfeedproject.comment.entity.QComment.comment;
 import static org.example.newsfeedproject.like.entity.QCommentLike.commentLike;
 
 import org.example.newsfeedproject.comment.entity.Comment;
+import org.example.newsfeedproject.comment.exception.CommentNotFoundException;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -50,11 +51,18 @@ public class QCommentRepositoryImpl implements QCommentRepository{
 
     @Override
     public void deleteByFeedId(Long feedId) {
-
+        queryFactory.delete(comment).where(comment.feed.id.eq(feedId)).execute();
     }
 
     @Override
     public Comment findByIdOrElseThrow(Long id) {
-        return null;
+        Comment result = queryFactory.selectFrom(comment)
+                .where(comment.id.eq(id))
+                .fetchOne();
+
+        if (result == null) {
+            throw new CommentNotFoundException(id);
+        }
+        return result;
     }
 }

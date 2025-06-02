@@ -1,9 +1,11 @@
 package org.example.newsfeedproject.comment.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Getter;
 import org.example.newsfeedproject.comment.entity.Comment;
 import java.time.LocalDateTime;
 
+@Getter
 public class CommentResponse {
     private Long id;
     private Long feedId;
