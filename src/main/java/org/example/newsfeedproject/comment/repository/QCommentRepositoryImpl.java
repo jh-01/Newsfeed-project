@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.dto.QCommentResponse;
 import static org.example.newsfeedproject.comment.entity.QComment.comment;
+import static org.example.newsfeedproject.comment.entity.QCommentImage.commentImage;
 import static org.example.newsfeedproject.like.entity.QCommentLike.commentLike;
 
 import org.example.newsfeedproject.comment.entity.Comment;
@@ -27,6 +28,12 @@ public class QCommentRepositoryImpl implements QCommentRepository{
                         comment.feed.id,
                         comment.user.nickname,
                         comment.comments,
+
+                        // 이미지
+                        JPAExpressions.select(commentImage.path)
+                                .from(commentImage)
+                                .where(commentImage.comment.id.eq(comment.id)),
+
                         comment.createdAt,
                         comment.modifiedAt,
 

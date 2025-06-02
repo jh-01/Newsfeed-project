@@ -11,17 +11,19 @@ public class CommentResponse {
     private Long feedId;
     private String nickname;
     private String comments;
+    private String image;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private Long likeCount;
     private boolean isLiked;
 
     @QueryProjection
-    public CommentResponse(Long id, Long feedId, String nickname, String content, LocalDateTime createdAt, LocalDateTime modifiedAt, Long likeCount, boolean isLiked) {
+    public CommentResponse(Long id, Long feedId, String nickname, String content, String image, LocalDateTime createdAt, LocalDateTime modifiedAt, Long likeCount, boolean isLiked) {
         this.id = id;
         this.feedId = feedId;
         this.nickname = nickname;
         this.comments = content;
+        this.image = image;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.likeCount = likeCount;
@@ -29,11 +31,17 @@ public class CommentResponse {
     }
 
     public static CommentResponse of(Comment saved, boolean b, long l) {
+        String imagePath = null;
+        if (saved.getCommentImage() != null) {
+            imagePath = saved.getCommentImage().getPath();
+        }
+
         return new CommentResponse(
                 saved.getId(),
                 saved.getFeed().getId(),
                 saved.getUser().getNickname(),
                 saved.getComments(),
+                imagePath,
                 saved.getCreatedAt(),
                 saved.getModifiedAt(),
                 l,

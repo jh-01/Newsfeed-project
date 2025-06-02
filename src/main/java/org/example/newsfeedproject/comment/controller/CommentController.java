@@ -2,8 +2,8 @@ package org.example.newsfeedproject.comment.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeedproject.comment.dto.CommentCreateRequest;
 import org.example.newsfeedproject.comment.dto.CommentModifyRequest;
 import org.example.newsfeedproject.comment.dto.CommentResponse;
 import org.example.newsfeedproject.comment.service.CommentService;
@@ -11,6 +11,8 @@ import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.example.newsfeedproject.user.constant.Const;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -23,8 +25,10 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CommentResponse> create(
             HttpServletRequest request,
-            @RequestBody CommentCreateRequest createRequest
-            ){
+            @NotNull @RequestParam Long feedId,
+            @NotNull @RequestParam String comments,
+            @RequestPart(required = false) MultipartFile image
+    ){
         HttpSession session = request.getSession(false);
         if(session == null) {
             throw new RuntimeException("로그인을 해주세요.");
@@ -34,7 +38,7 @@ public class CommentController {
         SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        CommentResponse response = commentService.saveComment(createRequest.getFeedId(), loginUser.getId(), createRequest.getComments());
+        CommentResponse response = commentService.saveComment(feedId, loginUser.getId(), comments, image);
         return ResponseEntity.ok(response);
     }
 
@@ -68,7 +72,8 @@ public class CommentController {
     public ResponseEntity<CommentResponse> modifyComment(
             HttpServletRequest request,
             @PathVariable Long id,
-            @RequestBody CommentModifyRequest modifyRequest
+            @NotNull @RequestParam String comments,
+            @RequestPart(required = false) MultipartFile image
     ){
         HttpSession session = request.getSession(false);
         if(session == null) {
@@ -78,7 +83,7 @@ public class CommentController {
         SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
         // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        CommentResponse response = commentService.modifyComment(id, loginUser.getId(), modifyRequest.getComments());
+        CommentResponse response = commentService.modifyComment(id, loginUser.getId(), comments, image);
         return ResponseEntity.ok(response);
     }
 

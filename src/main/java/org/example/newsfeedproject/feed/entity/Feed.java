@@ -3,9 +3,13 @@ package org.example.newsfeedproject.feed.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.newsfeedproject.comment.entity.Comment;
+import org.example.newsfeedproject.common.entity.BaseTimeEntity;
 import org.example.newsfeedproject.user.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 게시글(Feed) 정보를 저장하는 엔티티 클래스
@@ -15,7 +19,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Feed {
+@Table(name = "feed")
+public class Feed extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +36,8 @@ public class Feed {
     @Column(nullable = false, length = 255)
     private String contents; // 게시글 내용 (최대 255자)
 
-    private LocalDateTime createdAt;   // 작성 시간
-    private LocalDateTime modifiedAt;  // 수정 시간
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     /**
      * 게시글 생성 시 사용하는 생성자
@@ -42,8 +47,6 @@ public class Feed {
         this.user = user;
         this.title = title;
         this.contents = contents;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     /**
@@ -56,6 +59,5 @@ public class Feed {
     public void update(String title, String contents) {
         this.title = title;
         this.contents = contents;
-        this.modifiedAt = LocalDateTime.now();
     }
 }

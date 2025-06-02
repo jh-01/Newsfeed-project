@@ -24,6 +24,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
 
+    @Transactional
     public FeedResponseDto createFeed(FeedRequestDto requestDto, User user) {
         validateUser(user); // 인증되지 않은 유저 차단
         Feed feed = new Feed(user, requestDto.getTitle(), requestDto.getContents());
