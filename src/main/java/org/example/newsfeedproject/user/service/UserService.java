@@ -7,6 +7,7 @@ import org.example.newsfeedproject.user.dto.SessionUserDto;
 import org.example.newsfeedproject.user.dto.UpdateProfileDto;
 import org.example.newsfeedproject.user.dto.UserResponseDto;
 import org.example.newsfeedproject.user.entity.User;
+import org.example.newsfeedproject.user.passwordencoder.PasswordEncoder;
 import org.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 유저 생성 - 회원가입
     public UserResponseDto signup(String email, String password, String nickName) {
@@ -34,7 +36,7 @@ public class UserService {
         }
 
         // BCrypt 로 인코딩
-        String encodedPassword = BCrypt.withDefaults().hashToString(10, password.toCharArray());
+        String encodedPassword = passwordEncoder.encode(password);
 
         // 인코딩된 정보로 유저생성
         User user = new User(email, encodedPassword, nickName);
@@ -105,16 +107,13 @@ public class UserService {
     public void updatePassword(Long id, String oldPassword, String newPassword) {
         User user = userRepository.findByIdOrElseThrow(id);
 
-        // 비밀번호 검증
-        BCrypt.Result result = BCrypt.verifyer().verify(oldPassword.toCharArray(), user.getPassword());
-
         // 비밀번호가 다르면 400 반환
-        if (!result.verified) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다.");
         }
 
         // 수정된 비밀번호 암호화
-        String encodedNewPassword = BCrypt.withDefaults().hashToString(10,newPassword.toCharArray());
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
 
         // 비밀번호 변경
         user.updatePassword(encodedNewPassword);
@@ -125,13 +124,10 @@ public class UserService {
     @Transactional
     public void deleteUser(Long id, String password) {
         User user = userRepository.findByIdOrElseThrow(id);
-
-        // 헤더에서 받아온 비밀번호 검증
-        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
-
+        
         // 비밀번호가 다르면 400 반환
-        if (!result.verified) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"비밀번호가 일치하지 않습니다.");
         }
 
         // 소프트삭제 실행
