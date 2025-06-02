@@ -15,6 +15,6 @@ public class FriendsResponseDto {
     private final String email;
 
     public static FriendsResponseDto toDto(Friend friend) {
-        return new FriendsResponseDto(friend.getId(), friend.getFriendId().getNickname(), friend.getFriendId().getEmail());
+        return new FriendsResponseDto(friend.getFriendId().getId(), friend.getFriendId().getNickname(), friend.getFriendId().getEmail());
     }
 }
