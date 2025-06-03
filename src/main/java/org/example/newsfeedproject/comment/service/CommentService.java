@@ -71,10 +71,10 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse getComment(Long id){
-        final Optional<Comment> optionalComment = commentRepository.findById(id);
+    public CommentResponse getComment(Long id, Long userId){
+        final Optional<CommentResponse> optionalComment = Optional.ofNullable(commentRepository.findById(id, userId));
         if(optionalComment.isEmpty()) throw new CommentNotFoundException(id);
-        return Comment.toDto(optionalComment.get());
+        return optionalComment.get();
     }
 
     @Transactional
