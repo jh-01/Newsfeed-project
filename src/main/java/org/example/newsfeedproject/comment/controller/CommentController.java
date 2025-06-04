@@ -37,7 +37,6 @@ public class CommentController {
         // session에 저장된 유저정보 조회
         SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
-        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
         CommentResponse response = commentService.saveComment(feedId, loginUser.getId(), comments, image);
         return ResponseEntity.ok(response);
     }
@@ -54,17 +53,23 @@ public class CommentController {
         // session에 저장된 유저정보 조회
         SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
-        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
         List<CommentResponse> commentResponseList = commentService.getAllComments(id, loginUser.getId());
         return ResponseEntity.ok(commentResponseList);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<CommentResponse> getComment(
+            HttpServletRequest request,
             @PathVariable Long id
     ){
-        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
-        CommentResponse commentResponse = commentService.getComment(id);
+        HttpSession session = request.getSession(false);
+        if(session == null) {
+            throw new RuntimeException("로그인을 해주세요.");
+        }
+        // session에 저장된 유저정보 조회
+        SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
+
+        CommentResponse commentResponse = commentService.getComment(id, loginUser.getId());
         return ResponseEntity.ok(commentResponse);
     }
 
@@ -82,7 +87,6 @@ public class CommentController {
         // session에 저장된 유저정보 조회
         SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
-        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
         CommentResponse response = commentService.modifyComment(id, loginUser.getId(), comments, image);
         return ResponseEntity.ok(response);
     }
@@ -99,7 +103,6 @@ public class CommentController {
         // session에 저장된 유저정보 조회
         SessionUserDto loginUser = (SessionUserDto) session.getAttribute(Const.USER);
 
-        // 지금은 아이디에 임의의 값 전달, 추후 세션에 아이디 저장하면 해당 값 불러오기
         commentService.deleteComment(id, loginUser.getId());
         return ResponseEntity.ok("댓글 삭제가 완료되었습니다.");
     }

@@ -52,7 +52,7 @@ public class UserController {
 
 
     // 전체 유저 조회
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<UserResponseDto>> findAll(){
 
         List<UserResponseDto> findAllUser = userService.findAll();
